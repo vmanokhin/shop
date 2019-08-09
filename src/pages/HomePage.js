@@ -1,22 +1,39 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { loadProducts } from '../ducks/products';
 import Page from '../layouts/Page';
+import ProductList from '../components/product-list';
 
-function HomePage() {
-    return (
-        <Page>
-            <div className="container">
-                <div className="row">
-                    <div className="col-8">
-                        main
-                    </div>
+class HomePage extends Component {
+    componentDidMount() {
+        const { loadProducts, loading, loaded } = this.props;
 
-                    <div className="col-4">
-                        sidebar
+        if (!loaded && !loading) loadProducts();
+    }
+
+    render() {
+        const { products } = this.props;
+
+        return (
+            <Page>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-9">
+                            <ProductList products={products} />
+                        </div>
+
+                        <div className="col-md-3">
+                            sidebar
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Page>
-    );
+            </Page>
+        );
+    }
 }
 
-export default HomePage;
+export default connect(({ products }) => ({
+    loaded: products.loaded,
+    loading: products.loading,
+    products: products.entities.valueSeq().toArray()
+}), { loadProducts })(HomePage);

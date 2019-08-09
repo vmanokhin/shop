@@ -6,6 +6,12 @@ export function objectToOrderMap(obj, Model = new OrderedMap()) {
     }, new OrderedMap());
 }
 
+export function mapToOrderedMap(arr, Model = new OrderedMap()) {
+    return arr.reduce((map, cur) => {
+        return map.set(cur.id, Model(cur));
+    }, new OrderedMap());
+}
+
 export function immutableMapToArr(Model) {
     return Model.valueSeq().toArray();
 }
