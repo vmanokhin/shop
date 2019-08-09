@@ -36,9 +36,9 @@ export default function reducer(state = new ReducerRecord(), action) {
         case PRODUCTS_SUCCESS: {
             return state
                 .set('loading', false)
-                .set('loaded', !payload.entities.length)
+                .set('loaded', payload.isLast)
                 .set('error', null)
-                .update('entities', entities => mapToOrderedMap(payload.entities, ProductModel).concat(entities));
+                .update('entities', entities => entities.merge(mapToOrderedMap(payload.entities, ProductModel)));
         }
 
         case PRODUCTS_FAILURE: {
@@ -65,7 +65,10 @@ export function loadProducts(offset) {
 
             dispatch({
                 type: PRODUCTS_SUCCESS,
-                payload: { entities: data.products }
+                payload: {
+                    entities: data.products,
+                    isLast: data.isLast
+                }
             });
 
         } catch(_) {
