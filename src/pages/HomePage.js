@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import { loadProducts } from '../ducks/products';
 import Page from '../layouts/Page';
 import ProductList from '../components/product-list';
+import {productsSelector} from '../ducks/products';
 
 class HomePage extends Component {
     loadMoreHandler = () => {
@@ -41,8 +42,8 @@ class HomePage extends Component {
     }
 }
 
-export default connect(({ products }) => ({
-    loaded: products.loaded,
-    loading: products.loading,
-    products: products.entities.valueSeq().toArray()
+export default connect(state => ({
+    loaded: state.products.loaded,
+    loading: state.products.loading,
+    products: productsSelector(state)
 }), { loadProducts })(HomePage);

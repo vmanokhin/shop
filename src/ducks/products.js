@@ -1,4 +1,5 @@
 import {OrderedMap, Record} from 'immutable';
+import { createSelector } from 'reselect';
 import axios from '../libs/axios';
 import { appName, apiUrl } from '../config';
 import { mapToOrderedMap } from '../libs/utils';
@@ -53,6 +54,13 @@ export default function reducer(state = new ReducerRecord(), action) {
     }
 }
 
+/* Selectors */
+const productsGetter = state => state.products.entities;
+export const productsSelector = createSelector(productsGetter, (items) => {
+   return items.valueSeq().toArray();
+});
+
+/* Side effects */
 export function loadProducts(offset) {
     return async dispatch => {
         dispatch({

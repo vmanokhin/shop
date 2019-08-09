@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import ProductCard from './product-card';
 
-function ProductList(props)  {
-    const { products } = props;
+class ProductList extends PureComponent  {
+    render() {
+        const { products } = this.props;
 
-    const productsElements = products.map(product => (
-        <div key={product.id} className="col-md-4">
-            <ProductCard product={product} />
-        </div>
-    ));
+        const productsElements = products.map(product => (
+            <div key={product.id} className="col-md-4">
+                <ProductCard product={product} />
+            </div>
+        ));
 
-    return (
-        <div className="row">
-            {productsElements}
-        </div>
-    )
+        return (
+            <div className="row">
+                {productsElements}
+            </div>
+        );
+    }
 }
 
 export default ProductList;
