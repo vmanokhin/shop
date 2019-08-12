@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { loadProducts } from '../ducks/products';
+import { loadProducts, productsSelector } from '../ducks/products';
 import Page from '../layouts/Page';
 import ProductList from '../components/product-list';
-import {productsSelector} from '../ducks/products';
 
 class HomePage extends Component {
     loadMoreHandler = () => {

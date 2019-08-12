@@ -1,4 +1,5 @@
 import React, {PureComponent} from 'react';
+import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -11,15 +12,17 @@ import truncate from 'lodash/truncate';
 class ProductCard extends PureComponent {
     render() {
         const {product} = this.props;
-        const { image, name, text } = product;
+        const { image, name, text, id } = product;
         const truncatedText = truncate(text, {
             length: 60,
             omission: '...'
         });
 
+        const ProductLink = React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />);
+
         return (
             <Card>
-                <CardActionArea>
+                <CardActionArea component={ProductLink} to={`/product/${id}/`}>
                     <CardMedia
                         image={image}
                         title="Contemplative Reptile"
