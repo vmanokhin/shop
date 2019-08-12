@@ -1,6 +1,7 @@
 import {OrderedMap, Record} from 'immutable';
 import { createSelector } from 'reselect';
 import axios from '../libs/axios';
+import sortBy from 'lodash/sortBy';
 import { appName, apiUrl } from '../config';
 import { mapToOrderedMap } from '../libs/utils';
 
@@ -20,7 +21,7 @@ export const ProductModel = Record({
     image: '',
     text: '',
     color: '',
-    price: '',
+    price: 0,
     material: '',
     type: '',
     company: ''
@@ -28,6 +29,7 @@ export const ProductModel = Record({
 
 export const ReducerRecord = Record({
     entities: new OrderedMap(),
+    sortProperty: 'price',
     loading: false,
     loaded: false,
     error: null
@@ -78,8 +80,9 @@ export default function reducer(state = new ReducerRecord(), action) {
 
 /* Selectors */
 const productsGetter = state => state.products.entities;
-export const productsSelector = createSelector(productsGetter, (items) => {
-   return items.valueSeq().toArray();
+const productsSortProp = state => state.products.sortProperty;
+export const productsSelector = createSelector(productsGetter, productsSortProp, (items, sortProperty) => {
+   return sortBy(items.valueSeq().toArray(), [sortProperty]);
 });
 
 const productIdGetter = (_, ownProps) => ownProps.match.params.id;
