@@ -32,7 +32,8 @@ export const ReducerRecord = Record({
     sortProperty: 'price',
     loading: false,
     loaded: false,
-    error: null
+    fullLoaded: true,
+    error: false
 }, 'ReducerRecord');
 
 
@@ -60,8 +61,9 @@ export default function reducer(state = new ReducerRecord(), action) {
         case PRODUCTS_SUCCESS: {
             return state
                 .set('loading', false)
-                .set('loaded', payload.isLast)
-                .set('error', null)
+                .set('loaded', true)
+                .set('fullLoaded', payload.isLast)
+                .set('error', false)
                 .update('entities', entities => entities.merge(mapToOrderedMap(payload.entities, ProductModel)));
         }
 

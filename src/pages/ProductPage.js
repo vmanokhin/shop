@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 import { loadProductById, productByIdSelector } from '../ducks/products';
 import Page from '../layouts/Page';
+import Loader from '../components/loader';
 
 class ProductPage extends Component {
     priceStyles = {
@@ -92,14 +93,14 @@ class ProductPage extends Component {
     }
 
     render() {
-        const { productId } = this.props;
+        const { productId, loading } = this.props;
 
         if (productId === undefined) return <Redirect to="/" />;
 
         return (
             <Page>
                 <div className="container">
-                    {this.body}
+                    { loading ? <Loader /> : this.body }
                 </div>
             </Page>
         )
