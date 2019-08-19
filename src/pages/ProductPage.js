@@ -7,7 +7,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
-import { loadProductById, productByIdSelector } from '../ducks/products';
+import { loadProductById, productByIdSelector, moduleName as productsModuleName } from '../ducks/products';
 import Page from '../layouts/Page';
 import Loader from '../components/loader';
 
@@ -109,6 +109,6 @@ class ProductPage extends Component {
 
 export default connect((state, ownProps) => ({
     product: productByIdSelector(state, ownProps),
-    loading: state.products.loading,
+    loading: state[productsModuleName].loading,
     productId: ownProps.match.params.id
 }), { loadProductById })(ProductPage);

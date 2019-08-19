@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { loadProducts, productsSelector } from '../ducks/products';
+import { loadProducts, productsSelector, moduleName as productsModuleName } from '../ducks/products';
 import Page from '../layouts/Page';
 import ProductList from '../components/product-list';
 import Loader from '../components/loader';
+import Sidebar from '../layouts/Sidebar';
+
 
 class HomePage extends Component {
     loadMoreHandler = () => {
@@ -25,7 +27,7 @@ class HomePage extends Component {
                 </div>
 
                 <div className="col-md-3">
-                    sidebar
+                    <Sidebar />
                 </div>
             </div>
         )
@@ -51,8 +53,9 @@ class HomePage extends Component {
 }
 
 export default connect(state => ({
-    loaded: state.products.loaded,
-    fullLoaded: state.products.fullLoaded,
-    loading: state.products.loading,
-    products: productsSelector(state)
+    loaded: state[productsModuleName].loaded,
+    fullLoaded: state[productsModuleName].fullLoaded,
+    loading: state[productsModuleName].loading,
+    products: productsSelector(state),
+
 }), { loadProducts })(HomePage);

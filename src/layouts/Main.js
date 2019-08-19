@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 
-import { routes, renderRoutes } from '../../routes';
+import { routes, renderRoutes } from '../routes';
 
 
 function Main() {

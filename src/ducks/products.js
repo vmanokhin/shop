@@ -1,7 +1,6 @@
-import {OrderedMap, Record} from 'immutable';
+import { OrderedMap, Record } from 'immutable';
 import { createSelector } from 'reselect';
 import axios from '../libs/axios';
-import sortBy from 'lodash/sortBy';
 import { appName, apiUrl } from '../config';
 import { mapToOrderedMap } from '../libs/utils';
 
@@ -15,7 +14,11 @@ const PRODUCT_BY_ID_REQUEST = `${appName}/${moduleName}/PRODUCT_BY_ID_REQUEST`;
 const PRODUCT_BY_ID_SUCCESS = `${appName}/${moduleName}/PRODUCT_BY_ID_SUCCESS`;
 const PRODUCT_BY_ID_FAILURE = `${appName}/${moduleName}/PRODUCT_BY_ID_FAILURE`;
 
-export const ProductModel = Record({
+const CATEGORIES_SUCCESS = `${appName}/${moduleName}/CATEGORIES_SUCCESS`;
+const CATEGORIES_FAILURE = `${appName}/${moduleName}/CATEGORIES_FAILURE`;
+const SET_CURRENT_CATEGORY = `${appName}/${moduleName}/SET_CURRENT_CATEGORY`;
+
+const ProductModel = Record({
     id: '',
     name: '',
     image: '',
@@ -23,11 +26,19 @@ export const ProductModel = Record({
     color: '',
     price: 0,
     material: '',
-    type: '',
+    categoryId: '',
     company: ''
 }, 'ProductModel');
 
-export const ReducerRecord = Record({
+const CategoryModel = Record({
+   id: '',
+   name: ''
+}, 'CategoryModel   ');
+
+const ReducerRecord = Record({
+    loadingCategories: false,
+    activeCategoryId: '',
+    categories: new OrderedMap(),
     entities: new OrderedMap(),
     sortProperty: 'price',
     loading: false,
@@ -67,6 +78,15 @@ export default function reducer(state = new ReducerRecord(), action) {
                 .update('entities', entities => entities.merge(mapToOrderedMap(payload.entities, ProductModel)));
         }
 
+        case CATEGORIES_SUCCESS: {
+            return state.update('categories', categories => categories.merge(mapToOrderedMap(payload.categories, CategoryModel)))
+        }
+
+        case SET_CURRENT_CATEGORY: {
+            return state.set('activeCategoryId', payload.id);
+        }
+
+        case CATEGORIES_FAILURE:
         case PRODUCT_BY_ID_FAILURE:
         case PRODUCTS_FAILURE: {
             return state
@@ -83,13 +103,25 @@ export default function reducer(state = new ReducerRecord(), action) {
 /* Selectors */
 const productsGetter = state => state.products.entities;
 const productsSortProp = state => state.products.sortProperty;
-export const productsSelector = createSelector(productsGetter, productsSortProp, (items, sortProperty) => {
-   return sortBy(items.valueSeq().toArray(), [sortProperty]);
+const activeCategoryIdGetter = state => state.products.activeCategoryId;
+export const productsSelector = createSelector(productsGetter, productsSortProp, activeCategoryIdGetter, (items, sortProperty, activeCategoryId) => {
+   let result = items.sortBy((item) => item[sortProperty]);
+
+   if (activeCategoryId) {
+       result = result.filter((item) => item.categoryId === activeCategoryId);
+   }
+
+   return result.valueSeq().toArray();
 });
 
 const productIdGetter = (_, ownProps) => ownProps.match.params.id;
 export const productByIdSelector = createSelector(productsGetter, productIdGetter, (items, id) => {
    if (id && items.has(id)) return items.get(id);
+});
+
+const categoriesGetter = state => state.products.categories;
+export const categoriesSelector = createSelector(categoriesGetter, (categories) => {
+    return categories.valueSeq().toArray();
 });
 
 /* Side effects */
@@ -120,7 +152,6 @@ export function loadProducts(offset) {
 }
 
 export function loadProductById(id) {
-
     return async dispatch => {
         if (!id) return;
 
@@ -144,5 +175,33 @@ export function loadProductById(id) {
                 type: PRODUCT_BY_ID_FAILURE
             });
         }
+    }
+}
+
+export function loadCategories() {
+    return async dispatch => {
+        try {
+            const url = `${apiUrl}/categories/`;
+            const { data } = await axios.get(url);
+
+            dispatch({
+                type: CATEGORIES_SUCCESS,
+                payload: {
+                    categories: data.categories
+                }
+            });
+
+        } catch(_) {
+            dispatch({
+                type: CATEGORIES_FAILURE
+            });
+        }
+    }
+}
+
+export function setCurrentCategory(id) {
+    return {
+        type: SET_CURRENT_CATEGORY,
+        payload: { id }
     }
 }
