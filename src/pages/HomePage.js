@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { loadProducts, productsSelector, moduleName as productsModuleName } from '../ducks/products';
+import { 
+    productLengthGetter,
+    loadProducts,
+    productsSelector, 
+    moduleName as productsModuleName 
+} from '../ducks/products';
 import Page from '../layouts/Page';
 import ProductList from '../components/product-list';
 import Loader from '../components/loader';
@@ -10,9 +15,14 @@ import Sidebar from '../layouts/Sidebar';
 
 class HomePage extends Component {
     loadMoreHandler = () => {
-        const { loadProducts, loading, fullLoaded, products } = this.props;
+        const { 
+            loadProducts, 
+            loading, 
+            fullLoaded, 
+            productLength,    
+        } = this.props;
 
-        if (!fullLoaded && !loading) loadProducts(products.length);
+        if (!fullLoaded && !loading) loadProducts(productLength);
     };
 
     get body() {
@@ -57,5 +67,5 @@ export default connect(state => ({
     fullLoaded: state[productsModuleName].fullLoaded,
     loading: state[productsModuleName].loading,
     products: productsSelector(state),
-
+    productLength: productLengthGetter(state)
 }), { loadProducts })(HomePage);

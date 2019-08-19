@@ -6,17 +6,19 @@ import { mapToOrderedMap } from '../libs/utils';
 
 
 export const moduleName = 'products';
-const PRODUCTS_REQUEST = `${appName}/${moduleName}/PRODUCTS_REQUEST`;
-const PRODUCTS_SUCCESS = `${appName}/${moduleName}/PRODUCTS_SUCCESS`;
-const PRODUCTS_FAILURE = `${appName}/${moduleName}/PRODUCTS_FAILURE`;
+const prefix = `${appName}/${moduleName}`;
 
-const PRODUCT_BY_ID_REQUEST = `${appName}/${moduleName}/PRODUCT_BY_ID_REQUEST`;
-const PRODUCT_BY_ID_SUCCESS = `${appName}/${moduleName}/PRODUCT_BY_ID_SUCCESS`;
-const PRODUCT_BY_ID_FAILURE = `${appName}/${moduleName}/PRODUCT_BY_ID_FAILURE`;
+const PRODUCTS_REQUEST = `${prefix}/PRODUCTS_REQUEST`;
+const PRODUCTS_SUCCESS = `${prefix}/PRODUCTS_SUCCESS`;
+const PRODUCTS_FAILURE = `${prefix}/PRODUCTS_FAILURE`;
 
-const CATEGORIES_SUCCESS = `${appName}/${moduleName}/CATEGORIES_SUCCESS`;
-const CATEGORIES_FAILURE = `${appName}/${moduleName}/CATEGORIES_FAILURE`;
-const SET_CURRENT_CATEGORY = `${appName}/${moduleName}/SET_CURRENT_CATEGORY`;
+const PRODUCT_BY_ID_REQUEST = `${prefix}/PRODUCT_BY_ID_REQUEST`;
+const PRODUCT_BY_ID_SUCCESS = `${prefix}/PRODUCT_BY_ID_SUCCESS`;
+const PRODUCT_BY_ID_FAILURE = `${prefix}/PRODUCT_BY_ID_FAILURE`;
+
+const CATEGORIES_SUCCESS = `${prefix}/CATEGORIES_SUCCESS`;
+const CATEGORIES_FAILURE = `${prefix}/CATEGORIES_FAILURE`;
+const SET_CURRENT_CATEGORY = `${prefix}/SET_CURRENT_CATEGORY`;
 
 const ProductModel = Record({
     id: '',
@@ -101,9 +103,9 @@ export default function reducer(state = new ReducerRecord(), action) {
 }
 
 /* Selectors */
-const productsGetter = state => state.products.entities;
-const productsSortProp = state => state.products.sortProperty;
-const activeCategoryIdGetter = state => state.products.activeCategoryId;
+const productsGetter = state => state[moduleName].entities;
+const productsSortProp = state => state[moduleName].sortProperty;
+const activeCategoryIdGetter = state => state[moduleName].activeCategoryId;
 export const productsSelector = createSelector(productsGetter, productsSortProp, activeCategoryIdGetter, (items, sortProperty, activeCategoryId) => {
    let result = items.sortBy((item) => item[sortProperty]);
 
@@ -119,10 +121,12 @@ export const productByIdSelector = createSelector(productsGetter, productIdGette
    if (id && items.has(id)) return items.get(id);
 });
 
-const categoriesGetter = state => state.products.categories;
+const categoriesGetter = state => state[moduleName].categories;
 export const categoriesSelector = createSelector(categoriesGetter, (categories) => {
     return categories.valueSeq().toArray();
 });
+
+export const productLengthGetter = state => state[moduleName].entities.size;
 
 /* Side effects */
 export function loadProducts(offset) {
