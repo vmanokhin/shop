@@ -1,5 +1,8 @@
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
+
 import ProductCard from './product-card';
+
 
 function ProductList (props) {
     const { products } = props;
@@ -10,8 +13,17 @@ function ProductList (props) {
         </div>
     ));
 
+    const FallbackComponent = !products.length && (
+        <div className="col-12">
+            <Typography paragraph variant="h4" component="h2">
+                Not found products for the current filter
+            </Typography>
+        </div>
+    );
+
     return (
         <div className="row">
+            {FallbackComponent}
             {productsElements}
         </div>
     );
