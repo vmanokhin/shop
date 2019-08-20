@@ -20,6 +20,9 @@ const CATEGORIES_SUCCESS = `${prefix}/CATEGORIES_SUCCESS`;
 const CATEGORIES_FAILURE = `${prefix}/CATEGORIES_FAILURE`;
 const SET_CURRENT_CATEGORY = `${prefix}/SET_CURRENT_CATEGORY`;
 
+const SUBMIT_SEARCH_FORM = `${prefix}/SUBMIT_SEARCH_FORM`;
+
+
 const ProductModel = Record({
     id: '',
     name: '',
@@ -33,12 +36,13 @@ const ProductModel = Record({
 }, 'ProductModel');
 
 const CategoryModel = Record({
-   id: '',
-   name: ''
+    id: '',
+    name: ''
 }, 'CategoryModel   ');
 
 const ReducerRecord = Record({
     loadingCategories: false,
+    search: '',
     activeCategoryId: '',
     categories: new OrderedMap(),
     entities: new OrderedMap(),
@@ -67,7 +71,7 @@ export default function reducer(state = new ReducerRecord(), action) {
                     .set('loading', false)
                     .update('entities', entities => entities.set(product.id, ProductModel(product)));
             } else {
-                return  state;
+                return state;
             }
         }
 
@@ -96,6 +100,10 @@ export default function reducer(state = new ReducerRecord(), action) {
                 .set('error', true);
         }
 
+        case SUBMIT_SEARCH_FORM: {
+            return state.set('search', payload.value || '');
+        }
+
         default: {
             return state;
         }
@@ -106,19 +114,31 @@ export default function reducer(state = new ReducerRecord(), action) {
 const productsGetter = state => state[moduleName].entities;
 const productsSortProp = state => state[moduleName].sortProperty;
 const activeCategoryIdGetter = state => state[moduleName].activeCategoryId;
-export const productsSelector = createSelector(productsGetter, productsSortProp, activeCategoryIdGetter, (items, sortProperty, activeCategoryId) => {
-   let result = items.sortBy((item) => item[sortProperty]);
+const searchValueGetter = state => state[moduleName].search;
 
-   if (activeCategoryId) {
-       result = result.filter((item) => item.categoryId === activeCategoryId);
-   }
+export const productsSelector = createSelector([
+    productsGetter,
+    productsSortProp,
+    activeCategoryIdGetter,
+    searchValueGetter
+], (items, sortProperty, activeCategoryId, search) => {
 
-   return result.valueSeq().toArray();
+    let result = items.sortBy((item) => item[sortProperty]);
+
+    //filter by active category
+    if (activeCategoryId) {
+        result = result.filter((item) => item.categoryId === activeCategoryId);
+    }
+
+    //filter by search
+    result = result.filter((item) => item.name.toLowerCase && item.name.toLowerCase().includes(search.toLowerCase()));
+
+    return result.valueSeq().toArray();
 });
 
 const productIdGetter = (_, ownProps) => ownProps.match.params.id;
 export const productByIdSelector = createSelector(productsGetter, productIdGetter, (items, id) => {
-   if (id && items.has(id)) return items.get(id);
+    if (id && items.has(id)) return items.get(id);
 });
 
 const categoriesGetter = state => state[moduleName].categories;
@@ -147,7 +167,7 @@ export function loadProducts(offset) {
                 }
             });
 
-        } catch(_) {
+        } catch (_) {
             dispatch({
                 type: PRODUCTS_FAILURE
             });
@@ -174,7 +194,7 @@ export function loadProductById(id) {
                 }
             });
 
-        } catch(_) {
+        } catch (_) {
             dispatch({
                 type: PRODUCT_BY_ID_FAILURE
             });
@@ -195,7 +215,7 @@ export function loadCategories() {
                 }
             });
 
-        } catch(_) {
+        } catch (_) {
             dispatch({
                 type: CATEGORIES_FAILURE
             });
@@ -207,5 +227,12 @@ export function setCurrentCategory(id) {
     return {
         type: SET_CURRENT_CATEGORY,
         payload: { id }
+    }
+}
+
+export function submitSearchForm(value) {
+    return {
+        type: SUBMIT_SEARCH_FORM,
+        payload: { value }
     }
 }

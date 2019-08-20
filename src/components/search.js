@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { makeStyles, fade } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
+
+import { submitSearchForm } from '../ducks/products';
 
 
 const useStyles = makeStyles(theme => ({
@@ -37,24 +40,46 @@ const useStyles = makeStyles(theme => ({
 
 const inputProps = { 'aria-label': 'search' };
 
-function Search() {
+function Search(props) {
+    const { submitSearchForm } = props;
     const classes = useStyles();
+    const [inputValue, setValue] = useState('');
+
+    const setInputValue = (e) => {
+        const value = e.target.value;
+
+        if (value === '') {
+           submitSearchForm('');
+        }
+
+        setValue(value);
+    };
+
+    const onSubmitForm = e => {
+        e.preventDefault();
+        submitSearchForm(inputValue);
+    };
 
     return (
-        <div className={classes.search}>
+        <form className={classes.search} onSubmit={onSubmitForm}>
             <div className={classes.searchIcon}>
                 <SearchIcon />
             </div>
             <InputBase
-                placeholder="Search…"
+                placeholder="Search product"
                 classes={{
                     root: classes.inputRoot,
-                    input: classes.inputInput,
+                    input: classes.inputInput
                 }}
                 inputProps={inputProps}
+                type='search'
+                onChange={setInputValue}
+                value={inputValue}
             />
-        </div>
+        </form>
     )
 }
 
-export default Search;
+export default connect(null, {
+    submitSearchForm
+})(Search);
