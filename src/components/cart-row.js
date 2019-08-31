@@ -61,6 +61,7 @@ function CartRow(props) {
 				<Typography variant="h6">
 					<Counter
 						increment={incrementProduct}
+						decrement={decrementProduct}
 						count={entities.length} 
 					/>
 				</Typography>
