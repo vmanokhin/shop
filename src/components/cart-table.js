@@ -23,12 +23,12 @@ const useStyles = makeStyles(theme => ({
 
 
 function CartTable(props) {
-    const { items } = props;
+    const { ids } = props;
     const classes = useStyles();
 
-    if (!items.length) return null;
+    if (!ids.length) return null;
 
-    const body = items.map(({ id, entities }) => <CartRow key={id} id={id} entities={entities}/>);
+    const body = ids.map(id => <CartRow key={id} id={id} />);
 
     return (
         <Paper className={classes.root}>
@@ -51,7 +51,7 @@ function CartTable(props) {
 }
 
 CartTable.defaultProps = {
-    items: []
+    ids: []
 };
 
 export default CartTable;

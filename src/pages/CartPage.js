@@ -7,11 +7,12 @@ import Page from '../layouts/Page';
 import AdapterLink from '../components/adapter-link';
 import CartTable from '../components/cart-table';
 import CartNav from '../components/cart-nav';
-import { productsCartNormalized, totalSumSelector } from '../ducks/cart';
+import { uniqIdsSelector, idsArraySelector } from '../ducks/cart';
+import { sumProductsSelector } from '../ducks/products';
 
 
 function CartPage(props) {
-    const { products, sum } = props;
+    const { productsIds, sum } = props;
 
     const fallback = (
         <Typography paragraph variant="h4">
@@ -25,9 +26,9 @@ function CartPage(props) {
 
 		const sumText = <Typography paragraph variant="h5" align="right">Total sum: {sum} $</Typography>;
 
-		const body = !products.length ? fallback : (
+		const body = !productsIds.length ? fallback : (
 			<>
-				<CartTable items={products} />
+				<CartTable ids={productsIds} />
 				{sumText}
 				<CartNav />
 			</>
@@ -42,7 +43,11 @@ function CartPage(props) {
     );
 }
 
-export default connect(state => ({
-		sum: totalSumSelector(state),
-    products: productsCartNormalized(state)
-}))(CartPage);
+export default connect(state => {
+	const ids = idsArraySelector(state);
+
+	return ({
+		productsIds: uniqIdsSelector(state),
+		sum: sumProductsSelector(state, ids),
+	})
+})(CartPage);

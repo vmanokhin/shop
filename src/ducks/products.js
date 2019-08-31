@@ -38,7 +38,7 @@ const ProductModel = Record({
 const CategoryModel = Record({
     id: '',
     name: ''
-}, 'CategoryModel   ');
+}, 'CategoryModel');
 
 const ReducerRecord = Record({
     loadingCategories: false,
@@ -51,7 +51,7 @@ const ReducerRecord = Record({
     loaded: false,
     fullLoaded: true,
     error: false
-}, 'ReducerRecord');
+}, 'ProductsReducerRecord');
 
 
 export default function reducer(state = new ReducerRecord(), action) {
@@ -115,6 +115,10 @@ export const productsGetter = state => state[moduleName].entities;
 const productsSortProp = state => state[moduleName].sortProperty;
 const activeCategoryIdGetter = state => state[moduleName].activeCategoryId;
 const searchValueGetter = state => state[moduleName].search;
+export const productLengthGetter = state => state[moduleName].entities.size;
+const productIdGetter = (_, id) => id;
+const categoriesGetter = state => state[moduleName].categories;
+const sumIdsGetter = (_, ids) => ids || [];
 
 export const productsSelector = createSelector([
     productsGetter,
@@ -136,17 +140,26 @@ export const productsSelector = createSelector([
     return result.valueSeq().toArray();
 });
 
-const productIdGetter = (_, ownProps) => ownProps.match.params.id;
 export const productByIdSelector = createSelector(productsGetter, productIdGetter, (items, id) => {
     if (id && items.has(id)) return items.get(id);
 });
 
-const categoriesGetter = state => state[moduleName].categories;
 export const categoriesSelector = createSelector(categoriesGetter, (categories) => {
     return categories.valueSeq().toArray();
 });
 
-export const productLengthGetter = state => state[moduleName].entities.size;
+export const sumProductsSelector = createSelector(productsGetter, sumIdsGetter, (products, ids) => {
+	if (!ids.reduce) return 0;
+
+	return ids.reduce((acc, cur) => {
+		if (products.has(cur)) {
+			const product = products.get(cur);
+			return acc + parseInt(product.price, 10);
+		}
+
+		return acc;
+	}, 0);
+});
 
 /* Side effects */
 export function loadProducts(offset) {

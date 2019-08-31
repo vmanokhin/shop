@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
@@ -8,82 +9,102 @@ import Typography from '@material-ui/core/Typography';
 import AdapterLink from './adapter-link';
 import CartCell from './cart-cell';
 import Counter from './counter';
-import { deleteProduct, decrementProduct, incrementProduct } from '../ducks/cart';
-import { connect } from 'react-redux';
+import {
+	deleteProduct,
+	decrementProduct,
+	incrementProduct,
+	countByIdSelector
+} from '../ducks/cart';
+import { productByIdSelector } from '../ducks/products';
 
 
-const useStyles = makeStyles(theme => ({
-    imageCell: {
-        width: theme.spacing(21)
-    },
-    image: {
-        maxWidth: '100%'
-    },
-    link: {
-        color: theme.palette.common.black,
-        '&:hover': {
-            color: theme.palette.common.black,
-            textDecoration: 'none'
-        }
-    }
-}));
+const styles = theme => ({
+		imageCell: {
+				width: theme.spacing(21)
+		},
+		image: {
+				maxWidth: '100%'
+		},
+		link: {
+				color: theme.palette.common.black,
+				'&:hover': {
+						color: theme.palette.common.black,
+						textDecoration: 'none'
+				}
+		}
+});
+		
 
+class CartRow extends Component {
+	static defaultProps = {
+		product: {}
+	};
 
-function CartRow(props) {
-	const classes = useStyles();
+	deleteHandlerClick = () => {
+		const { deleteProduct, id } = this.props;
+		deleteProduct(id);
+	};
 
-	const { 
-		entities, 
-		id, 
-		deleteProduct, 
-		incrementProduct, 
-		decrementProduct
-	} = props;
-	
-	const { name, image } = entities[0];
-	const sum = entities.reduce((acc, cur) => acc + parseInt(cur.price), 0);
+	incrementHandlerClick = () => {
+		const { incrementProduct, id } = this.props;
+		incrementProduct(id);
+	};
 
-	return (
-		<TableRow key={id}>
-			<CartCell scope="row" className={classes.imageCell}>
-				<Link to={`/product/${id}`}>
-					<img className={classes.image} src={image} alt="" />
-				</Link>
-			</CartCell>
+	decrementHandlerClick = () => {
+		const { decrementProduct, id } = this.props;
+		decrementProduct(id);
+	};
 
-			<CartCell>
-				<Typography className={classes.link} variant="h5" component={AdapterLink} to={`/product/${id}`}>
-					{name}
-				</Typography>
-			</CartCell>
+	render() {
+		const { product, id, count, classes } = this.props;
+		const { name, image, price } = product;
+		const sum = parseInt(price, 10) * count;
 
-			<CartCell align="right">
-				<Typography variant="h6">
-					<Counter
-						increment={incrementProduct}
-						decrement={decrementProduct}
-						count={entities.length} 
-					/>
-				</Typography>
-			</CartCell>
+		return (
+			<TableRow key={id}>
+				<CartCell scope="row" className={classes.imageCell}>
+					<Link to={`/product/${id}`}>
+						<img className={classes.image} src={image} alt="" />
+					</Link>
+				</CartCell>
 
-			<CartCell align="right">
-				<Typography variant="h5">
-					{sum} $
-				</Typography>
-			</CartCell>
+				<CartCell>
+					<Typography className={classes.link} variant="h5" component={AdapterLink} to={`/product/${id}`}>
+						{name}
+					</Typography>
+				</CartCell>
 
-			<CartCell align="center">
-				<IconButton color="inherit" onClick={deleteProduct}>
-					<DeleteOutlineIcon />
-				</IconButton>
-			</CartCell>
-		</TableRow>
-	)
+				<CartCell align="right">
+					<Typography variant="h6">
+						<Counter
+							increment={this.incrementHandlerClick}
+							decrement={this.decrementHandlerClick}
+							count={count}
+						/>
+					</Typography>
+				</CartCell>
+
+				<CartCell align="right">
+					<Typography variant="h5">
+						{sum} $
+					</Typography>
+				</CartCell>
+
+				<CartCell align="center">
+					<IconButton color="inherit" onClick={this.deleteHandlerClick}>
+						<DeleteOutlineIcon />
+					</IconButton>
+				</CartCell>
+			</TableRow>
+		)
+	}
 }
 
-export default connect(null, (dispatch, ownProps) => ({
-    deleteProduct: () => dispatch(deleteProduct(ownProps.id)),
-    incrementProduct: () => dispatch(incrementProduct(ownProps.id)),
-    decrementProduct: () => dispatch(decrementProduct(ownProps.id)),
-}))(CartRow);
+export default connect((state, ownProps) => ({
+	product: productByIdSelector(state, ownProps.id),
+	count: countByIdSelector(state, ownProps)
+}), ({
+	deleteProduct,
+	incrementProduct,
+	decrementProduct
+}))(withStyles(styles)(CartRow));

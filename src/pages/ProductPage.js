@@ -108,7 +108,7 @@ class ProductPage extends Component {
 }
 
 export default connect((state, ownProps) => ({
-    product: productByIdSelector(state, ownProps),
+    product: productByIdSelector(state, ownProps.match.params.id),
     loading: state[productsModuleName].loading,
     productId: ownProps.match.params.id
 }), { loadProductById })(ProductPage);
