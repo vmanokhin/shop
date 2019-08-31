@@ -111,7 +111,7 @@ export default function reducer(state = new ReducerRecord(), action) {
 }
 
 /* Selectors */
-const productsGetter = state => state[moduleName].entities;
+export const productsGetter = state => state[moduleName].entities;
 const productsSortProp = state => state[moduleName].sortProperty;
 const activeCategoryIdGetter = state => state[moduleName].activeCategoryId;
 const searchValueGetter = state => state[moduleName].search;

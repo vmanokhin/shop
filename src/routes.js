@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import NotFound from './pages/NotFound';
 import ProductPage from './pages/ProductPage';
+import CartPage from './pages/CartPage';
 
 export const routes = [
     {
@@ -17,6 +18,10 @@ export const routes = [
     {
         path: '/product/',
         component: ProductPage
+    },
+    {
+        path: '/cart/',
+        component: CartPage
     },
     {
         path: '/404',
