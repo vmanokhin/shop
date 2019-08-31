@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import Page from '../layouts/Page';
 import AdapterLink from '../components/adapter-link';
 import CartTable from '../components/cart-table';
+import CartNav from '../components/cart-nav';
 import { productsCartNormalized, totalSumSelector } from '../ducks/cart';
 
 
@@ -22,16 +23,20 @@ function CartPage(props) {
         </Typography>
     );
 
-		const sumText = products.length && sum
-		? <Typography paragraph variant="h4" align="right">{sum} $</Typography>
-		: null; 
+		const sumText = <Typography paragraph variant="h5" align="right">Total sum: {sum} $</Typography>;
+
+		const body = !products.length ? fallback : (
+			<>
+				<CartTable items={products} />
+				{sumText}
+				<CartNav />
+			</>
+		);
 
     return (
         <Page>
             <div className="container">
-                {!products.length && fallback}
-                <CartTable items={products} />
-								{sumText}
+                {body}
             </div>
         </Page>
     );

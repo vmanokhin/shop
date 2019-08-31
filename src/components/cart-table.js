@@ -23,12 +23,12 @@ const useStyles = makeStyles(theme => ({
 
 
 function CartTable(props) {
-    const { items, onDelete } = props;
+    const { items } = props;
     const classes = useStyles();
 
     if (!items.length) return null;
 
-    const body = items.map(({ id, entities }) => <CartRow key={id} entities={entities} onDelete={onDelete} />);
+    const body = items.map(({ id, entities }) => <CartRow key={id} id={id} entities={entities}/>);
 
     return (
         <Paper className={classes.root}>

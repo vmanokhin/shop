@@ -7,6 +7,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import AdapterLink from './adapter-link';
 import CartCell from './cart-cell';
+import Counter from './counter';
+import { deleteProduct, decrementProduct, incrementProduct } from '../ducks/cart';
+import { connect } from 'react-redux';
+
 
 const useStyles = makeStyles(theme => ({
     imageCell: {
@@ -28,9 +32,16 @@ const useStyles = makeStyles(theme => ({
 function CartRow(props) {
 	const classes = useStyles();
 
-	const { entities, id, onDelete } = props;
+	const { 
+		entities, 
+		id, 
+		deleteProduct, 
+		incrementProduct, 
+		decrementProduct
+	} = props;
+	
 	const { name, image } = entities[0];
-	const sum = entities.reduce((acc, cur) => { return acc + parseInt(cur.price) }, 0);
+	const sum = entities.reduce((acc, cur) => acc + parseInt(cur.price), 0);
 
 	return (
 		<TableRow key={id}>
@@ -48,7 +59,10 @@ function CartRow(props) {
 
 			<CartCell align="right">
 				<Typography variant="h6">
-					{entities.length}
+					<Counter
+						increment={incrementProduct}
+						count={entities.length} 
+					/>
 				</Typography>
 			</CartCell>
 
@@ -59,7 +73,7 @@ function CartRow(props) {
 			</CartCell>
 
 			<CartCell align="center">
-				<IconButton color="inherit" onClick={onDelete}>
+				<IconButton color="inherit" onClick={deleteProduct}>
 					<DeleteOutlineIcon />
 				</IconButton>
 			</CartCell>
@@ -67,4 +81,8 @@ function CartRow(props) {
 	)
 }
 
-export default CartRow;
+export default connect(null, (dispatch, ownProps) => ({
+    deleteProduct: () => dispatch(deleteProduct(ownProps.id)),
+    incrementProduct: () => dispatch(incrementProduct(ownProps.id)),
+    decrementProduct: () => dispatch(decrementProduct(ownProps.id)),
+}))(CartRow);
