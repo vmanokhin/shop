@@ -6,34 +6,33 @@ import TableRow from '@material-ui/core/TableRow';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import AdapterLink from './adapter-link';
+import AdapterLink from '../common/adapter-link';
+import Counter from '../common/counter';
 import CartCell from './cart-cell';
-import Counter from './counter';
 import {
 	deleteProduct,
 	decrementProduct,
 	incrementProduct,
 	countByIdSelector
-} from '../ducks/cart';
-import { productByIdSelector } from '../ducks/products';
+} from '../../ducks/cart';
+import { productByIdSelector } from '../../ducks/products';
 
 
 const styles = theme => ({
-		imageCell: {
-				width: theme.spacing(21)
-		},
-		image: {
-				maxWidth: '100%'
-		},
-		link: {
-				color: theme.palette.common.black,
-				'&:hover': {
-						color: theme.palette.common.black,
-						textDecoration: 'none'
-				}
+	imageCell: {
+		width: theme.spacing(21)
+	},
+	image: {
+		maxWidth: '100%'
+	},
+	link: {
+		color: theme.palette.common.black,
+		'&:hover': {
+			color: theme.palette.common.black,
+			textDecoration: 'none'
 		}
+	}
 });
-		
 
 class CartRow extends Component {
 	static defaultProps = {

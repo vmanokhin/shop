@@ -1,71 +1,70 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { 
-    productLengthGetter,
-    loadProducts,
-    productsSelector, 
-    moduleName as productsModuleName 
+import {
+	productLengthGetter,
+	loadProducts,
+	productsSelector,
+	moduleName as productsModuleName
 } from '../ducks/products';
 import Page from '../layouts/Page';
-import ProductList from '../components/product-list';
-import Loader from '../components/loader';
+import ProductList from '../components/product/product-list';
+import Loader from '../components/common/loader';
 import Sidebar from '../layouts/Sidebar';
 
 
 class HomePage extends Component {
-    loadMoreHandler = () => {
-        const { 
-            loadProducts, 
-            loading, 
-            fullLoaded, 
-            productLength,    
-        } = this.props;
+	get body() {
+		const { products, loading, fullLoaded } = this.props;
 
-        if (!fullLoaded && !loading) loadProducts(productLength);
-    };
+		return (
+			<div className="row">
+				<div className="col-md-9">
+					<ProductList products={products} />
 
-    get body() {
-        const { products, loading, fullLoaded } = this.props;
+					{!fullLoaded && <Button onClick={this.loadMoreHandler} disabled={loading} variant="contained" color="primary">Load more</Button>}
+				</div>
 
-        return (
-            <div className="row">
-                <div className="col-md-9">
-                    <ProductList products={products} />
+				<div className="col-md-3">
+					<Sidebar />
+				</div>
+			</div>
+		)
+	}
+	
+	loadMoreHandler = () => {
+		const {
+			loadProducts,
+			loading,
+			fullLoaded,
+			productLength,
+		} = this.props;
 
-                    {!fullLoaded && <Button onClick={this.loadMoreHandler} disabled={loading} variant="contained" color="primary">Load more</Button>}
-                </div>
+		if (!fullLoaded && !loading) loadProducts(productLength);
+	};
 
-                <div className="col-md-3">
-                    <Sidebar />
-                </div>
-            </div>
-        )
-    }
+	componentDidMount() {
+		const { loadProducts, loading, loaded } = this.props;
+		if (!loaded && !loading) loadProducts();
+	}
 
-    componentDidMount() {
-        const { loadProducts, loading, loaded } = this.props;
+	render() {
+		const { loading, loaded } = this.props;
 
-        if (!loaded && !loading) loadProducts();
-    }
-
-    render() {
-        const { loading, loaded } = this.props;
-
-        return (
-            <Page>
-                <div className="container">
-                    { loading && !loaded ? <Loader /> : this.body }
-                </div>
-            </Page>
-        );
-    }
+		return (
+			<Page>
+				<div className="container">
+					{loading && !loaded ? <Loader /> : this.body}
+				</div>
+			</Page>
+		);
+	}
 }
 
 export default connect(state => ({
-    loaded: state[productsModuleName].loaded,
-    fullLoaded: state[productsModuleName].fullLoaded,
-    loading: state[productsModuleName].loading,
-    products: productsSelector(state),
-    productLength: productLengthGetter(state)
+	loaded: state[productsModuleName].loaded,
+	fullLoaded: state[productsModuleName].fullLoaded,
+	loading: state[productsModuleName].loading,
+	products: productsSelector(state),
+	productLength: productLengthGetter(state)
 }), { loadProducts })(HomePage);

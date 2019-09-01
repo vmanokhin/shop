@@ -9,16 +9,16 @@ import Footer from './layouts/Footer';
 
 
 class App extends Component {
-    render() {
-        return (
-            <div className='wrapper'>
-                <CssBaseline />
-                <Header />
-                <Main />
-                <Footer />
-            </div>
-        );
-    }
+	render() {
+		return (
+			<div className='wrapper'>
+				<CssBaseline />
+				<Header />
+				<Main />
+				<Footer />
+			</div>
+		);
+	}
 }
 
 export default App;

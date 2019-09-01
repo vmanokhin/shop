@@ -4,11 +4,11 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 
 
 function AccountIcon() {
-    return (
-        <IconButton color="inherit">
-            <AccountCircle />
-        </IconButton>
-    );
+	return (
+		<IconButton color="inherit">
+			<AccountCircle />
+		</IconButton>
+	);
 }
 
 export default AccountIcon;

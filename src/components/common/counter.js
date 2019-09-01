@@ -6,15 +6,15 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 
 const useStyles = makeStyles(theme => ({
-    count: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1)
-    },
-    root: {
-				display: 'inline-flex',
-				alignItems: 'center',
-        maxWidth: '100%'
-    }
+	count: {
+		marginLeft: theme.spacing(1),
+		marginRight: theme.spacing(1)
+	},
+	root: {
+		display: 'inline-flex',
+		alignItems: 'center',
+		maxWidth: '100%'
+	}
 }));
 
 function Counter(props) {

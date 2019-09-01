@@ -10,15 +10,15 @@ import App from './App';
 const defaultTheme = createMuiTheme();
 
 function Root() {
-    return (
-        <ThemeProvider theme={defaultTheme}>
-            <Provider store={store} >
-                <Router history={history}>
-                    <App/>
-                </Router>
-            </Provider>
-        </ThemeProvider>
-    );
+	return (
+		<ThemeProvider theme={defaultTheme}>
+			<Provider store={store} >
+				<Router history={history}>
+					<App />
+				</Router>
+			</Provider>
+		</ThemeProvider>
+	);
 }
 
 export default Root;

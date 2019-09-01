@@ -9,8 +9,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import truncate from 'lodash/truncate';
 
-import AdapterLink from './adapter-link';
-import { addToCart } from '../ducks/cart';
+import AdapterLink from '../common/adapter-link';
+import { addToCart } from '../../ducks/cart';
 
 
 function ProductCard(props) {

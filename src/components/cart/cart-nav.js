@@ -2,21 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-
-import { clearCart } from '../ducks/cart';
+import { clearCart } from '../../ducks/cart';
 
 
 const useStyles = makeStyles(theme => ({
-    root: {
-				display: 'flex',
-				justifyContent: 'flex-end',
-        marginTop: theme.spacing(4)
-    },
-    button: {
-        marginLeft: theme.spacing(2)
-    }
+	root: {
+		display: 'flex',
+		justifyContent: 'flex-end',
+		marginTop: theme.spacing(4)
+	},
+	button: {
+		marginLeft: theme.spacing(2)
+	}
 }));
-
 
 function CartNav(props) {
 	const classes = useStyles();

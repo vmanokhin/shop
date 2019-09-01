@@ -9,106 +9,105 @@ import TableRow from '@material-ui/core/TableRow';
 
 import { loadProductById, productByIdSelector, moduleName as productsModuleName } from '../ducks/products';
 import Page from '../layouts/Page';
-import Loader from '../components/loader';
+import Loader from '../components/common/loader';
 
 class ProductPage extends Component {
-    priceStyles = {
-        margin: 0
-    };
+	priceStyles = {
+		margin: 0
+	};
 
-    get body() {
-        const { product } = this.props;
-        if (!product) return null;
+	get body() {
+		const { product } = this.props;
+		if (!product) return null;
 
-        const {
-            name,
-            image,
-            text,
-            price,
-            color,
-            material,
-            company,
-        } = product;
+		const {
+			name,
+			image,
+			text,
+			price,
+			color,
+			material,
+			company,
+		} = product;
 
-        const normalizedPrice = `${parseInt(price)} $`;
+		const normalizedPrice = `${parseInt(price)} $`;
 
-        return  (
-            <div className="row">
-                <div className="col-md-4">
-                    <img src={image} alt=""/>
-                </div>
+		return (
+			<div className="row">
+				<div className="col-md-4">
+					<img src={image} alt="" />
+				</div>
 
-                <div className="col-md-7 offset-1">
-                    <h1>{name}</h1>
+				<div className="col-md-7 offset-1">
+					<h1>{name}</h1>
 
-                    <p>{text}</p>
+					<p>{text}</p>
 
-                    <div className="row d-flex align-items-center">
-                        <div className="col-auto">
-                            <h2 style={this.priceStyles}>{normalizedPrice}</h2>
-                        </div>
+					<div className="row d-flex align-items-center">
+						<div className="col-auto">
+							<h2 style={this.priceStyles}>{normalizedPrice}</h2>
+						</div>
 
-                        <div className="col-auto">
-                            <Button onClick={this.buyBtnClickHandler} variant="contained" size="large" color="primary">Buy item</Button>
-                        </div>
-                    </div>
+						<div className="col-auto">
+							<Button onClick={this.buyBtnClickHandler} variant="contained" size="large" color="primary">Buy item</Button>
+						</div>
+					</div>
 
+					<Table>
+						<TableBody>
+							<TableRow>
+								<TableCell>Company</TableCell>
+								<TableCell>{company}</TableCell>
+							</TableRow>
 
-                    <Table>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell>Company</TableCell>
-                                <TableCell>{company}</TableCell>
-                            </TableRow>
+							<TableRow>
+								<TableCell>Color</TableCell>
+								<TableCell>{color}</TableCell>
+							</TableRow>
 
-                            <TableRow>
-                                <TableCell>Color</TableCell>
-                                <TableCell>{color}</TableCell>
-                            </TableRow>
+							<TableRow>
+								<TableCell>Material</TableCell>
+								<TableCell>{material}</TableCell>
+							</TableRow>
+						</TableBody>
+					</Table>
+				</div>
+			</div>
+		)
+	}
 
-                            <TableRow>
-                                <TableCell>Material</TableCell>
-                                <TableCell>{material}</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </div>
-            </div>
-        )
-    }
+	buyBtnClickHandler = () => {
+		console.log('buy!');
+	};
 
-    buyBtnClickHandler = () => {
-        console.log('buy!');
-    };
+	componentDidMount() {
+		const {
+			productId,
+			product,
+			loading,
+			loadProductById
+		} = this.props;
 
-    componentDidMount() {
-        const {
-            productId,
-            product,
-            loading,
-            loadProductById
-        } = this.props;
+		if (productId && !product && !loading) loadProductById(productId);
+	}
 
-        if (productId && !product && !loading) loadProductById(productId);
-    }
+	render() {
+		const { productId, loading } = this.props;
 
-    render() {
-        const { productId, loading } = this.props;
+		if (productId === undefined) return <Redirect to="/" />;
 
-        if (productId === undefined) return <Redirect to="/" />;
-
-        return (
-            <Page>
-                <div className="container">
-                    { loading ? <Loader /> : this.body }
-                </div>
-            </Page>
-        )
-    }
+		return (
+			<Page>
+				<div className="container">
+					{loading ? <Loader /> : this.body}
+				</div>
+			</Page>
+		)
+	}
 }
 
 export default connect((state, ownProps) => ({
-    product: productByIdSelector(state, ownProps.match.params.id),
-    loading: state[productsModuleName].loading,
-    productId: ownProps.match.params.id
+	product: productByIdSelector(state, ownProps.match.params.id),
+	loading: state[productsModuleName].loading,
+	productId: ownProps.match.params.id
 }), { loadProductById })(ProductPage);
