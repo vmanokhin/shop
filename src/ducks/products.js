@@ -11,6 +11,7 @@ import { mapToOrderedMap } from '../libs/utils';
 export const moduleName = 'products';
 const prefix = `${appName}/${moduleName}`;
 
+export const PRODUCT = `${prefix}/PRODUCT`;
 const PRODUCTS_REQUEST = `${prefix}/PRODUCTS_REQUEST`;
 const PRODUCTS_SUCCESS = `${prefix}/PRODUCTS_SUCCESS`;
 const PRODUCTS_FAILURE = `${prefix}/PRODUCTS_FAILURE`;

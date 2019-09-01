@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { loadCategories, categoriesSelector } from '../ducks/products';
 import CategoryList from '../components/product/category-list';
+import CartDropTarget from '../components/cart/cart-drop-target';
 
 
 class Sidebar extends Component {
@@ -15,6 +16,7 @@ class Sidebar extends Component {
 
 		return (
 			<div>
+				<CartDropTarget />
 				{!loadingCategories && categories.length && <CategoryList categories={categories} />}
 			</div>
 		)
