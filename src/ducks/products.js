@@ -29,7 +29,7 @@ const SUBMIT_SEARCH_FORM = `${prefix}/SUBMIT_SEARCH_FORM`;
 /**
  *  Models
  */
-const ProductModel = Record({
+export const ProductModel = Record({
 	id: '',
 	name: '',
 	image: '',
@@ -41,7 +41,7 @@ const ProductModel = Record({
 	company: ''
 }, 'ProductModel');
 
-const CategoryModel = Record({
+export const CategoryModel = Record({
 	id: '',
 	name: ''
 }, 'CategoryModel');

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles, fade } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
@@ -74,5 +75,9 @@ function Search(props) {
 		</form>
 	)
 }
+
+Search.propTypes = {
+	submit: PropTypes.func.isRequired
+};
 
 export default Search;

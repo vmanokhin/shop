@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/styles'
 import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
@@ -36,6 +37,10 @@ function BasketIcon(props) {
 		</IconButton>
 	);
 }
+
+BasketIcon.propTypes = {
+	counts: PropTypes.number
+};
 
 export default connect(state => ({
 	counts: sizeGetter(state)

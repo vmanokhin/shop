@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
@@ -15,7 +16,7 @@ import {
 	incrementProduct,
 	countByIdSelector
 } from '../../ducks/cart';
-import { productByIdSelector } from '../../ducks/products';
+import { productByIdSelector, ProductModel } from '../../ducks/products';
 
 
 const styles = theme => ({
@@ -35,8 +36,17 @@ const styles = theme => ({
 });
 
 class CartRow extends Component {
+	static propTypes = {
+		deleteProduct: PropTypes.func.isRequired,
+		incrementProduct: PropTypes.func.isRequired,
+		decrementProduct: PropTypes.func.isRequired,
+		count: PropTypes.number,
+		id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+		product: PropTypes.instanceOf(ProductModel).isRequired
+	};
+
 	static defaultProps = {
-		product: {}
+		product: new ProductModel()
 	};
 
 	deleteHandlerClick = () => {

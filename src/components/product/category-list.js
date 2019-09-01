@@ -1,13 +1,24 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
-import { setCurrentCategory, moduleName as productsModuleName } from '../../ducks/products';
+import { 
+	CategoryModel,
+	setCurrentCategory, 
+	moduleName as productsModuleName 
+} from '../../ducks/products';
 
 
 class CategoryList extends Component {
+	static propTypes = {
+		activeId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+		setCurrentCategory: PropTypes.func.isRequired,
+		categories: PropTypes.arrayOf(PropTypes.instanceOf(CategoryModel)).isRequired
+	};
+
 	get elements() {
 		const { categories, activeId } = this.props;
 
