@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { DragLayer } from 'react-dnd';
 import ProuctDragPreview from '../product/product-drag-preview';
 import { PRODUCT } from '../../ducks/products';
-import throttle from 'lodash/throttle';
+
 
 const THROTTLE_TIMEOUT = 16;
+const FORCE_UPDATE_TIMEOUT = 50;
 
 const layerStyles = {
   position: 'fixed',
@@ -25,32 +26,59 @@ function getCurrentPreview(item) {
 	}
 }
 
-function CustomDragLayer(props) {
-	const { isDragging, item, offset, clientOffset } = props;
-  
-	if (!isDragging || !item || !offset) return null;
 
-	const { x, y } = offset;
-	const shiftX = clientOffset.x - x;
-	const shiftY = clientOffset.y - y;
-  const transform = `translate(${x + shiftX}px, ${y + shiftY}px)`;
+class CustomDragLayer extends Component {
+	lastUpdate = Date.now();
+  timer = null;
 
-	const preview = getCurrentPreview(item);
+  shouldComponentUpdate() {
+		clearTimeout(this.timer);
 
-	if (!preview) return null; 
-	
-  return (
-		<div style={layerStyles}>
-			<div style={{ willChange: 'transform', transform }}>
-				{preview}
+		const now = Date.now();
+
+    if (now - this.lastUpdate > THROTTLE_TIMEOUT) {
+      this.lastUpdate = now;
+      return true;
+    }
+
+		this.timer = setTimeout(() => {
+			this.forceUpdate();
+		}, FORCE_UPDATE_TIMEOUT);
+
+    return false;
+  }
+
+	componentWillUnmount() {
+		clearTimeout(this.timer);
+	}
+
+	render() {
+		const { isDragging, item, offset, clientOffset } = this.props;
+		
+		if (!isDragging || !item || !offset) return null;
+
+		const { x, y } = offset;
+		const shiftX = clientOffset.x - x;
+		const shiftY = clientOffset.y - y;
+		const transform = `translate(${x + shiftX}px, ${y + shiftY}px)`;
+
+		const preview = getCurrentPreview(item);
+
+		if (!preview) return null; 
+		
+		return (
+			<div style={layerStyles}>
+				<div style={{ willChange: 'transform', transform }}>
+					{preview}
+				</div>
 			</div>
-		</div>
-  )
+		)
+	}
 }
 
-export default DragLayer(throttle(monitor => ({
+export default DragLayer(monitor => ({
 	clientOffset: monitor.getClientOffset(),
 	offset: monitor.getSourceClientOffset(),
 	isDragging: monitor.isDragging(),
 	item: monitor.getItem()
-}), THROTTLE_TIMEOUT))(CustomDragLayer);
+}))(CustomDragLayer);
