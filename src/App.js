@@ -6,6 +6,7 @@ import './assets/sass/app.sass';
 import Header from './layouts/Header';
 import Main from './layouts/Main';
 import Footer from './layouts/Footer';
+import DragLayer from './components/common/drag-layer';
 
 
 class App extends Component {
@@ -16,6 +17,7 @@ class App extends Component {
 				<Header />
 				<Main />
 				<Footer />
+				<DragLayer />
 			</div>
 		);
 	}
