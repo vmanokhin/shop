@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import { useSnackbar } from 'notistack';
 import { clearCart } from '../../ducks/cart';
 
 
@@ -19,11 +20,20 @@ const useStyles = makeStyles(theme => ({
 
 function CartNav(props) {
 	const classes = useStyles();
+	const { enqueueSnackbar } = useSnackbar();
 	const { clearCart } = props;
+
+	function clearCartHandler() {
+		clearCart();
+		
+		enqueueSnackbar('Cart is cleaned', {
+			variant: 'success'
+		});
+	}
 
 	return (
 		<div className={classes.root}>
-			<Button className={classes.button} size="medium" variant="outlined" color="primary" onClick={clearCart}>Clear cart</Button>
+			<Button className={classes.button} size="medium" variant="outlined" color="primary" onClick={clearCartHandler}>Clear cart</Button>
 			<Button className={classes.button} size="medium" variant="contained" color="secondary">Checkout</Button>
 		</div>
 	)

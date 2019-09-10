@@ -1,19 +1,27 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import { withTheme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import { useSnackbar } from 'notistack';
 import { PRODUCT } from '../../ducks/products';
 import { addToCart } from '../../ducks/cart';
 
 
 function CartDropTarget(props) {
+	const { enqueueSnackbar } = useSnackbar();
 	const { theme, addToCart } = props;
 	
 	const spec = {
 		accept: PRODUCT,
-		drop: ({ id }) => {
-			id && addToCart(id);
+		drop: ({ id, name }) => {
+			if (id) {
+				addToCart(id);
+				enqueueSnackbar(<span>Product <b>{name}</b> added to cart!</span>, {
+					variant: 'success'
+				});
+			}
 		},
 		collect: monitor => ({
 			isOver: monitor.isOver(),
@@ -52,6 +60,10 @@ function CartDropTarget(props) {
 		</Paper>
 	)
 }
+
+CartDropTarget.propTypes = {
+	addToCart: PropTypes.func.isRequired
+};
 
 export default connect(null, {
 	addToCart
