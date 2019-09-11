@@ -5,6 +5,8 @@ import { initReactI18next } from 'react-i18next';
 
 export const languages = ['en', 'ru'];
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 i18next
   .use(Backend)
   .use(LanguageDetector)
@@ -14,8 +16,8 @@ i18next
 		whitelist: languages,
 		preload: ['en'],
 		fallbackLng: 'en',
-		returnNull: false, // from env
-		debug: true, // from env
+		returnNull: !isDevelopment,
+		debug: isDevelopment,
 		backend: {
 			loadPath: '/locales/{{lng}}.json'
 		},
