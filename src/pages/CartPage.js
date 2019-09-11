@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import { useTranslation } from 'react-i18next';
 import Page from '../layouts/Page';
 import AdapterLink from '../components/common/adapter-link';
 import CartTable from '../components/cart/cart-table';
@@ -11,19 +12,20 @@ import { sumProductsSelector } from '../ducks/products';
 
 
 function CartPage(props) {
+	const { t } = useTranslation();
 	const { productsIds, sum } = props;
 
 	const fallback = (
 		<Typography paragraph variant="h4">
-			<span>Cart is empty. Will back to the </span>
+			<span>{t('cart.cart_empty')}</span>
 
 			<Button variant="contained" color="secondary" component={AdapterLink} to="/">
-				Catalog
+				{t('buttons.catalog')}
       </Button>
 		</Typography>
 	);
 
-	const sumText = <Typography paragraph variant="h5" align="right">Total sum: {sum} $</Typography>;
+	const sumText = <Typography paragraph variant="h5" align="right">{t('cart.total_sum')} {sum} $</Typography>;
 
 	const body = !productsIds.length ? fallback : (
 		<>

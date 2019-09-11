@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/styles'
 import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
+import { useTranslation } from 'react-i18next';
 import AdapterLink from '../common/adapter-link';
 import { sizeGetter } from '../../ducks/cart';
 
@@ -19,8 +20,9 @@ const useStyles = makeStyles(() => ({
 
 function BasketIcon(props) {
 	const { counts } = props;
+	const { t } = useTranslation();
 	const classes = useStyles();
-	const label = counts ? `Show ${counts} product` : 'The cart is empty';
+	const label = counts ? t('cart.show_products', { counts }) : t('cart.cart_empty_short');
 	const cartIsEmpty = !counts;
 
 	return (

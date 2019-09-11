@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import { useTranslation } from 'react-i18next';
+
 
 const useStyles = makeStyles(theme => ({
   close: {
@@ -14,11 +16,12 @@ const useStyles = makeStyles(theme => ({
 function MessageBar(props) {
 	const { text, isOpen, onClose, children, timeout, ...rest } = props;
   const classes = useStyles();
+	const { t } = useTranslation();
 
 	const actions = [
 		<IconButton
 			key="close"
-			aria-label="close"
+			aria-label={t('buttons.close')}
 			color="inherit"
 			className={classes.close}
 			onClick={onClose}

@@ -5,6 +5,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
+import { withTranslation } from 'react-i18next';
 import { 
 	CategoryModel,
 	setCurrentCategory, 
@@ -16,11 +17,12 @@ class CategoryList extends Component {
 	static propTypes = {
 		activeId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 		setCurrentCategory: PropTypes.func.isRequired,
-		categories: PropTypes.arrayOf(PropTypes.instanceOf(CategoryModel)).isRequired
+		categories: PropTypes.arrayOf(PropTypes.instanceOf(CategoryModel)).isRequired,
+		t: PropTypes.func.isRequired
 	};
 
 	get elements() {
-		const { categories, activeId } = this.props;
+		const { categories, activeId, t } = this.props;
 
 		if (!categories.length) return null;
 
@@ -32,7 +34,7 @@ class CategoryList extends Component {
 					divider
 					onClick={this.clickHandler('')}
 				>
-					<ListItemText primary={'All'} />
+					<ListItemText primary={t('common.all')} />
 				</ListItem>
 
 				{categories.map(({ name, id }, index) => (
@@ -71,6 +73,6 @@ class CategoryList extends Component {
 	}
 }
 
-export default connect(state => ({
+export default withTranslation()(connect(state => ({
 	activeId: state[productsModuleName].activeCategoryId
-}), { setCurrentCategory })(CategoryList);
+}), { setCurrentCategory })(CategoryList));

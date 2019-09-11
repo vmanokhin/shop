@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
+import { withTranslation } from 'react-i18next';
 import {
 	productLengthGetter,
 	loadProducts,
@@ -15,14 +16,16 @@ import Sidebar from '../layouts/Sidebar';
 
 class HomePage extends Component {
 	get body() {
-		const { products, loading, fullLoaded } = this.props;
+		const { products, loading, fullLoaded, t } = this.props;
 
 		return (
 			<div className="row">
 				<div className="col-md-9">
 					<ProductList products={products} />
 
-					{!fullLoaded && <Button onClick={this.loadMoreHandler} disabled={loading} variant="contained" color="primary">Load more</Button>}
+					{!fullLoaded && (
+						<Button onClick={this.loadMoreHandler} disabled={loading} variant="contained" color="primary">{t('buttons.load_more')}</Button>
+					)}
 				</div>
 
 				<div className="col-md-3">
@@ -61,10 +64,10 @@ class HomePage extends Component {
 	}
 }
 
-export default connect(state => ({
+export default withTranslation()(connect(state => ({
 	loaded: state[productsModuleName].loaded,
 	fullLoaded: state[productsModuleName].fullLoaded,
 	loading: state[productsModuleName].loading,
 	products: productsSelector(state),
 	productLength: productLengthGetter(state)
-}), { loadProducts })(HomePage);
+}), { loadProducts })(HomePage));

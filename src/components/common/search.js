@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles, fade } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
+import { useTranslation } from 'react-i18next';
 
 
 const useStyles = makeStyles(theme => ({
@@ -40,6 +41,7 @@ const inputProps = { 'aria-label': 'search' };
 
 function Search(props) {
 	const classes = useStyles();
+	const { t } = useTranslation();
 	const { submit } = props;
 	const [inputValue, setValue] = useState('');
 
@@ -62,7 +64,7 @@ function Search(props) {
 				<SearchIcon />
 			</div>
 			<InputBase
-				placeholder="Search product"
+				placeholder={t('common.search_product')}
 				classes={{
 					root: classes.inputRoot,
 					input: classes.inputInput

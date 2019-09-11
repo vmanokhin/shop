@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import truncate from 'lodash/truncate';
 import { useSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 import AdapterLink from '../common/adapter-link';
 import { addToCart } from '../../ducks/cart';
 import { ProductModel, PRODUCT } from '../../ducks/products';
@@ -28,6 +29,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function ProductCard(props) {
+	const { t } = useTranslation();
 	const { enqueueSnackbar } = useSnackbar();
 	const { product, addToCart } = props;
 
@@ -59,7 +61,7 @@ function ProductCard(props) {
 
 	function addToCartHandler() {
 		addToCart(id);
-		enqueueSnackbar && enqueueSnackbar(<span>Product <b>{product.name}</b> added to cart!</span>, {
+		enqueueSnackbar && enqueueSnackbar(<span>{t('product.product_added', { product: product.name })}</span>, {
 			variant: 'success'
 		});
 	}
@@ -81,8 +83,8 @@ function ProductCard(props) {
 				</CardContent>
 			</div>
 			<CardActions>
-				<Button variant="contained" size="small" color="primary" onClick={addToCartHandler}>Buy</Button>
-				<Button size="small" color="primary" component={AdapterLink} to={`/product/${id}/`}>More info</Button>
+				<Button variant="contained" size="small" color="primary" onClick={addToCartHandler}>{t('buttons.buy')}</Button>
+				<Button size="small" color="primary" component={AdapterLink} to={`/product/${id}/`}>{t('buttons.more_info')}</Button>
 			</CardActions>
 		</Card>
 	);

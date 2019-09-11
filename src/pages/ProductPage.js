@@ -6,7 +6,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-
+import { withTranslation } from 'react-i18next';
 import { loadProductById, productByIdSelector, moduleName as productsModuleName } from '../ducks/products';
 import Page from '../layouts/Page';
 import Loader from '../components/common/loader';
@@ -17,7 +17,7 @@ class ProductPage extends Component {
 	};
 
 	get body() {
-		const { product } = this.props;
+		const { product, t } = this.props;
 		if (!product) return null;
 
 		const {
@@ -49,24 +49,24 @@ class ProductPage extends Component {
 						</div>
 
 						<div className="col-auto">
-							<Button onClick={this.buyBtnClickHandler} variant="contained" size="large" color="primary">Buy item</Button>
+							<Button onClick={this.buyBtnClickHandler} variant="contained" size="large" color="primary">{t('buttons.buy_item')}</Button>
 						</div>
 					</div>
 
 					<Table>
 						<TableBody>
 							<TableRow>
-								<TableCell>Company</TableCell>
+								<TableCell>{t('product.company')}</TableCell>
 								<TableCell>{company}</TableCell>
 							</TableRow>
 
 							<TableRow>
-								<TableCell>Color</TableCell>
+								<TableCell>{t('product.color')}</TableCell>
 								<TableCell>{color}</TableCell>
 							</TableRow>
 
 							<TableRow>
-								<TableCell>Material</TableCell>
+								<TableCell>{t('product.material')}</TableCell>
 								<TableCell>{material}</TableCell>
 							</TableRow>
 						</TableBody>
@@ -106,8 +106,8 @@ class ProductPage extends Component {
 	}
 }
 
-export default connect((state, ownProps) => ({
+export default withTranslation()(connect((state, ownProps) => ({
 	product: productByIdSelector(state, ownProps.match.params.id),
 	loading: state[productsModuleName].loading,
 	productId: ownProps.match.params.id
-}), { loadProductById })(ProductPage);
+}), { loadProductById })(ProductPage));

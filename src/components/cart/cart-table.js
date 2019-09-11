@@ -6,6 +6,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { useTranslation } from 'react-i18next';
 import CartRow from './cart-row';
 import CartCell from './cart-cell';
 
@@ -25,6 +26,7 @@ const useStyles = makeStyles(theme => ({
 function CartTable(props) {
 	const { ids } = props;
 	const classes = useStyles();
+	const { t } = useTranslation();
 
 	if (!ids.length) return null;
 
@@ -35,11 +37,11 @@ function CartTable(props) {
 			<Table className={classes.table}>
 				<TableHead>
 					<TableRow>
-						<CartCell>Image</CartCell>
-						<CartCell align="left">Name</CartCell>
-						<CartCell align="right">Counts</CartCell>
-						<CartCell align="right">Price</CartCell>
-						<CartCell align="center">Delete</CartCell>
+						<CartCell>{t('cart.image')}</CartCell>
+						<CartCell align="left">{t('cart.name')}</CartCell>
+						<CartCell align="right">{t('cart.counts')}</CartCell>
+						<CartCell align="right">{t('cart.price')}</CartCell>
+						<CartCell align="center">{t('cart.delete')}</CartCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>

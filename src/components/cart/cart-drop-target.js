@@ -5,12 +5,14 @@ import { useDrop } from 'react-dnd';
 import { withTheme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import { useSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 import { PRODUCT } from '../../ducks/products';
 import { addToCart } from '../../ducks/cart';
 
 
 function CartDropTarget(props) {
 	const { enqueueSnackbar } = useSnackbar();
+	const { t } = useTranslation();
 	const { theme, addToCart } = props;
 	
 	const spec = {
@@ -18,7 +20,7 @@ function CartDropTarget(props) {
 		drop: ({ id, name }) => {
 			if (id) {
 				addToCart(id);
-				enqueueSnackbar(<span>Product <b>{name}</b> added to cart!</span>, {
+				enqueueSnackbar(t('product.product_added', { product: name }), {
 					variant: 'success'
 				});
 			}
@@ -56,7 +58,7 @@ function CartDropTarget(props) {
 
 	return (
 		<Paper ref={drop} style={{ ...styles.root }}>
-			Drop a product here!
+			{t('common.drop_product')}
 		</Paper>
 	)
 }
