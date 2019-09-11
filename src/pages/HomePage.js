@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { withTranslation } from 'react-i18next';
 import {
+	ProductModel,
 	productLengthGetter,
 	loadProducts,
 	productsSelector,
@@ -15,6 +17,16 @@ import Sidebar from '../layouts/Sidebar';
 
 
 class HomePage extends Component {
+	static propTypes = {
+			t: PropTypes.func.isRequired,
+			loadProducts: PropTypes.func.isRequired,
+			productLength: PropTypes.number.isRequired,
+			loading: PropTypes.bool.isRequired,
+			loaded: PropTypes.bool.isRequired,
+			fullLoaded: PropTypes.bool.isRequired,
+			products: PropTypes.arrayOf(PropTypes.instanceOf(ProductModel))
+	}
+
 	get body() {
 		const { products, loading, fullLoaded, t } = this.props;
 
@@ -40,7 +52,7 @@ class HomePage extends Component {
 			loadProducts,
 			loading,
 			fullLoaded,
-			productLength,
+			productLength
 		} = this.props;
 
 		if (!fullLoaded && !loading) loadProducts(productLength);

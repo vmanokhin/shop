@@ -45,10 +45,6 @@ class CartRow extends Component {
 		product: PropTypes.instanceOf(ProductModel).isRequired
 	};
 
-	static defaultProps = {
-		product: new ProductModel()
-	};
-
 	deleteHandlerClick = () => {
 		const { deleteProduct, id } = this.props;
 		deleteProduct(id);

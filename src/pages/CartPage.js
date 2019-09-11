@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -42,6 +43,17 @@ function CartPage(props) {
 			</div>
 		</Page>
 	);
+}
+
+CartPage.propTypes = {
+	sum: PropTypes.oneOfType([
+		PropTypes.string,
+		PropTypes.number
+	]),
+	productsIds: PropTypes.arrayOf(PropTypes.oneOfType([
+		PropTypes.string,
+		PropTypes.number
+	]))
 }
 
 export default connect(state => {

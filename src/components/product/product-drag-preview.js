@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { productByIdSelector } from '../../ducks/products'; 
+import { productByIdSelector, ProductModel } from '../../ducks/products'; 
 
 
 function ProductDragPreview(props) {
@@ -12,6 +13,10 @@ function ProductDragPreview(props) {
 		</h2>
 	)
 }
+
+ProductDragPreview.propTypes = {
+	product: PropTypes.instanceOf(ProductModel)
+};
 
 export default connect((state, ownProps) => ({
 	product: productByIdSelector(state, ownProps.id)

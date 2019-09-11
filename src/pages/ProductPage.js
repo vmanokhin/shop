@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
@@ -10,8 +11,21 @@ import { withTranslation } from 'react-i18next';
 import { loadProductById, productByIdSelector, moduleName as productsModuleName } from '../ducks/products';
 import Page from '../layouts/Page';
 import Loader from '../components/common/loader';
+import { ProductModel } from '../ducks/products';
+
 
 class ProductPage extends Component {
+	static propTypes = {
+		t: PropTypes.func.isRequired,
+		loadProductById: PropTypes.func.isRequired,
+		loading: PropTypes.bool.isRequired,
+		product: PropTypes.instanceOf(ProductModel),
+		productId: PropTypes.oneOfType([
+			PropTypes.number,
+			PropTypes.string
+		]).isRequired
+	};
+
 	priceStyles = {
 		margin: 0
 	};
