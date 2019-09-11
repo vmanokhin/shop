@@ -8,6 +8,7 @@ import BasketIcon from '../components/cart/basket-icon';
 import AccountIcon from '../components/auth/account-icon';
 import AdapterLink from '../components/common/adapter-link';
 import Search from '../components/common/search';
+import LanguageChanger from '../components/common/language-changer';
 import { submitSearchForm } from '../ducks/products';
 
 
@@ -39,6 +40,7 @@ function Header(props) {
 						<Search submit={props.submitSearchForm} />
 						<BasketIcon />
 						<AccountIcon />
+						<LanguageChanger />
 					</div>
 				</Toolbar>
 			</div>
