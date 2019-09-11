@@ -23,15 +23,15 @@ const useStyles = makeStyles(theme => ({
 function LanguageChanger(props) {
 	const { i18n } = useTranslation();
 	const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
+	const [anchorEl, setAnchorEl] = useState(null);
 
-  function handleClick(event) {
-    setAnchorEl(event.currentTarget);
-  }
+	function handleClick(event) {
+		setAnchorEl(event.currentTarget);
+	}
 
-  function handleClose() {
-    setAnchorEl(null);
-  }
+	function handleClose() {
+		setAnchorEl(null);
+	}
 
 	const changeLanguageHandler = (lang) => () => {
 		setAnchorEl(null);
@@ -42,10 +42,10 @@ function LanguageChanger(props) {
 	}
 
 	function renderMenuItems(items = []) {
-    return items.map(item => (
-			<MenuItem 
-				key={item} 
-				className={classes.menuItem} 
+		return items.map(item => (
+			<MenuItem
+				key={item}
+				className={classes.menuItem}
 				onClick={changeLanguageHandler(item)}
 				dense
 			>
@@ -54,22 +54,22 @@ function LanguageChanger(props) {
 		));
 	}
 
-  return (
-    <div>
+	return (
+		<div>
 			<IconButton className={classes.button} onClick={handleClick}>
 				{i18n.language}
 			</IconButton>
 
-      <Menu
-        keepMounted
-        open={Boolean(anchorEl)}
+			<Menu
+				keepMounted
+				open={Boolean(anchorEl)}
 				anchorEl={anchorEl}
-        onClose={handleClose}
-      >
+				onClose={handleClose}
+			>
 				{renderMenuItems(languages)}
-      </Menu>
-    </div>
-  );
+			</Menu>
+		</div>
+	);
 }
 
 
