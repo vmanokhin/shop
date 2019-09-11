@@ -8,16 +8,23 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import { withTranslation } from 'react-i18next';
-import { loadProductById, productByIdSelector, moduleName as productsModuleName } from '../ducks/products';
+import { withSnackbar } from 'notistack';
+import { 
+	ProductModel,
+	loadProductById, 
+	productByIdSelector, 
+	moduleName as productsModuleName 
+} from '../ducks/products';
+import { addToCart } from '../ducks/cart';
 import Page from '../layouts/Page';
 import Loader from '../components/common/loader';
-import { ProductModel } from '../ducks/products';
 
 
 class ProductPage extends Component {
 	static propTypes = {
 		t: PropTypes.func.isRequired,
 		loadProductById: PropTypes.func.isRequired,
+		addToCart: PropTypes.func.isRequired,
 		loading: PropTypes.bool.isRequired,
 		product: PropTypes.instanceOf(ProductModel),
 		productId: PropTypes.oneOfType([
@@ -91,7 +98,18 @@ class ProductPage extends Component {
 	}
 
 	buyBtnClickHandler = () => {
-		console.log('buy!');
+		const { 
+			product: { name }, 
+			t,
+			addToCart, 
+			enqueueSnackbar 
+		} = this.props;
+
+		addToCart(name);
+		
+		enqueueSnackbar && enqueueSnackbar(t('product.product_added', { product: name }), {
+			variant: 'success'
+		});
 	};
 
 	componentDidMount() {
@@ -124,4 +142,4 @@ export default withTranslation()(connect((state, ownProps) => ({
 	product: productByIdSelector(state, ownProps.match.params.id),
 	loading: state[productsModuleName].loading,
 	productId: ownProps.match.params.id
-}), { loadProductById })(ProductPage));
+}), { loadProductById, addToCart })(withSnackbar(ProductPage)));
