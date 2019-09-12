@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/styles';
+import React, { Component } from 'react';
+import { withStyles } from '@material-ui/styles';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
-import { useTranslation } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { languages } from '../../libs/i18next';
 
-const useStyles = makeStyles(theme => ({
+
+const styles = theme => ({
 	menuItem: {
 		textTransform: 'uppercase',
 		fontSize: theme.typography.fontSize
@@ -18,35 +19,51 @@ const useStyles = makeStyles(theme => ({
 		cursor: 'pointer',
 		textTransform: 'uppercase'
 	}
-}));
+});
 
-function LanguageChanger(props) {
-	const { i18n } = useTranslation();
-	const classes = useStyles();
-	const [anchorEl, setAnchorEl] = useState(null);
+class LanguageChanger extends Component {
+	static defaultProps = {
+		classes: {}
+	};
 
-	function handleClick(event) {
-		setAnchorEl(event.currentTarget);
-	}
+	state = {
+		isOpen: false
+	};
 
-	function handleClose() {
-		setAnchorEl(null);
-	}
+	refContainer = React.createRef();
 
-	const changeLanguageHandler = (lang) => () => {
-		setAnchorEl(null);
+	handleClick = () => {
+		this.setState({
+			isOpen: true
+		});
+	};
+
+	handleClose = () => {
+		this.setState({
+			isOpen: false
+		})
+	};
+
+	changeLanguageHandler = (lang) => () => {
+		const { i18n } = this.props;
+
+		this.setState({
+			isOpen: false
+		});
 
 		if (i18n.language !== lang) {
 			i18n.changeLanguage(lang);
 		}
 	}
 
-	function renderMenuItems(items = []) {
+	renderMenuItems(items = []) {
+		const { classes } = this.props;
+
 		return items.map(item => (
 			<MenuItem
 				key={item}
 				className={classes.menuItem}
-				onClick={changeLanguageHandler(item)}
+				onClick={this.changeLanguageHandler(item)}
 				dense
 			>
 				{item}
@@ -54,23 +71,28 @@ function LanguageChanger(props) {
 		));
 	}
 
-	return (
-		<div>
-			<IconButton className={classes.button} onClick={handleClick}>
-				{i18n.language}
-			</IconButton>
+	render() {
+		const { i18n, classes } = this.props;
+		const { isOpen } = this.state;
 
-			<Menu
-				keepMounted
-				open={Boolean(anchorEl)}
-				anchorEl={anchorEl}
-				onClose={handleClose}
-			>
-				{renderMenuItems(languages)}
-			</Menu>
-		</div>
-	);
+		return (
+			<div ref={this.refContainer}>
+				<IconButton className={classes.button} onClick={this.handleClick}>
+					{i18n.language}
+				</IconButton>
+
+				{this.refContainer.current && isOpen && <Menu
+					keepMounted
+					open={isOpen}
+					anchorEl={this.refContainer.current}
+					onClose={this.handleClose}
+				>
+					{this.renderMenuItems(languages)}
+				</Menu>}
+			</div>
+		);
+	}
 }
 
 
-export default LanguageChanger;
+export default withTranslation()(withStyles(styles)(LanguageChanger));
