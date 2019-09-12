@@ -77,6 +77,9 @@ function ProductCard(props) {
 					<Typography className={classes.name}  gutterBottom variant="h5" component={AdapterLink} to={`/product/${id}/`}>
 						{name}
 					</Typography>
+					<Typography gutterBottom variant="h4">
+						{product.price} $
+					</Typography>
 					<Typography variant="body2" color="textSecondary" component="p">
 						{truncatedText}
 					</Typography>
