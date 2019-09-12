@@ -28,6 +28,9 @@
 		"not_found": "Not found products for the current filter",
 		"product_added": "Product {{product}} added to cart!"
 	},
+	"filters": {
+		"sort_by": "Sort by"
+	},
 	"common": {
 		"search_product": "Search product",
 		"drop_product": "Drop a product here",
