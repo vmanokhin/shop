@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 import { 
+	PRICE_ASC,
+	PRICE_DESC,
 	productsSortProp,
 	searchValueGetter
 } from '../ducks/filters';
@@ -15,8 +17,23 @@ export const productsFilteredSelector = createSelector(
 	searchValueGetter, 
 	productsSelector,
 	(sortProp, search, products) => {
-		let result = products.sortBy((item) => item[sortProp.toLowerCase()]);
+		let result;
+		
+		switch (sortProp) {
+			case PRICE_ASC: {
+				result = products.sort((a, b) => a.price - b.price);
+				break;
+			}
+			case PRICE_DESC: {
+				result = products.sort((a, b) => b.price - a.price);
+				break;
+			}
 
+			default: {
+				result = products;
+			}
+		}
+		
 		result = result.filter((item) => item.name.toLowerCase && item.name.toLowerCase().includes(search.toLowerCase()));
 		
 		return result.valueSeq().toArray();

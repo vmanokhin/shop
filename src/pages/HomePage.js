@@ -14,6 +14,7 @@ import Page from '../layouts/Page';
 import ProductList from '../components/product/product-list';
 import Loader from '../components/common/loader';
 import Sidebar from '../layouts/Sidebar';
+import SortContainer from '../components/product/sort-container';
 
 
 class HomePage extends Component {
@@ -33,6 +34,8 @@ class HomePage extends Component {
 		return (
 			<div className="row">
 				<div className="col-md-9">
+					<SortContainer />
+					
 					<ProductList products={products} />
 
 					{!fullLoaded && (

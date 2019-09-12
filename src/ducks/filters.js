@@ -9,14 +9,19 @@ import { appName } from '../config';
 export const moduleName = 'filters';
 const prefix = `${appName}/${moduleName}`;
 
-const PRICE = 'PRICE';
+export const PRICE_ASC = 'price asc';
+export const PRICE_DESC = 'price desc';
+export const sortProperties = [PRICE_ASC, PRICE_DESC];
+
 const SUBMIT_SEARCH_FORM = `${prefix}/SUBMIT_SEARCH_FORM`;
+const CHANGE_SORT_PROPERTY =`${prefix}/CHANGE_SORT_PROPERTY`;
+
 
 /**
  *  Models
  */
 const ReducerRecord = Record({
-	sortProperty: PRICE,
+	sortProperty: PRICE_ASC,
 	search: '',
 }, 'FiltersReducerRecord');
 
@@ -30,6 +35,10 @@ export default function reducer(state = new ReducerRecord(), action) {
 	switch (type) {
 		case SUBMIT_SEARCH_FORM: {
 			return state.set('search', payload.value || '');
+		}
+
+		case CHANGE_SORT_PROPERTY: {
+			return state.set('sortProperty', payload.value || PRICE_ASC);
 		}
 
 		default: {
@@ -57,5 +66,8 @@ export function submitSearchForm(value) {
 }
 
 export function changeSortProperty(value) {
-
+	return {
+		type: CHANGE_SORT_PROPERTY,
+		payload: { value }
+	}
 }
