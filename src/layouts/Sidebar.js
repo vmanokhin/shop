@@ -1,29 +1,33 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { loadCategories, categoriesSelector } from '../ducks/products';
-import CategoryList from '../components/product/category-list';
+import { 
+	loadFilters, 
+	categoriesSelector,
+	moduleName 
+} from '../ducks/filters';
+import CategoryList from '../components/filters/category-list';
 import CartDropTarget from '../components/cart/cart-drop-target';
 
 
 class Sidebar extends Component {
 	componentDidMount() {
-		const { loadCategories, loadingCategories, categories } = this.props;
-		if (!loadingCategories && !categories.length) loadCategories();
+		const { loadFilters, loading, categories } = this.props;
+		if (!loading && !categories.length) loadFilters();
 	}
 
 	render() {
-		const { loadingCategories, categories } = this.props;
+		const { loading, categories } = this.props;
 
 		return (
 			<div>
 				<CartDropTarget />
-				{!loadingCategories && categories.length && <CategoryList categories={categories} />}
+				{!loading && categories.length && <CategoryList categories={categories} />}
 			</div>
 		)
 	}
 }
 
 export default connect(state => ({
-	loadingCategories: state.products.loadCategories,
+	loading: state[moduleName].loading,
 	categories: categoriesSelector(state)
-}), { loadCategories })(Sidebar);
+}), { loadFilters })(Sidebar);

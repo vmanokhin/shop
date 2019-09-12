@@ -7,10 +7,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import { withTranslation } from 'react-i18next';
 import { 
-	CategoryModel,
+	CategoryModel, 
 	setCurrentCategory, 
 	moduleName as productsModuleName 
-} from '../../ducks/products';
+} from '../../ducks/filters';
 
 
 class CategoryList extends Component {

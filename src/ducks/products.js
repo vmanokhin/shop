@@ -20,10 +20,6 @@ const PRODUCT_BY_ID_REQUEST = `${prefix}/PRODUCT_BY_ID_REQUEST`;
 const PRODUCT_BY_ID_SUCCESS = `${prefix}/PRODUCT_BY_ID_SUCCESS`;
 const PRODUCT_BY_ID_FAILURE = `${prefix}/PRODUCT_BY_ID_FAILURE`;
 
-const CATEGORIES_SUCCESS = `${prefix}/CATEGORIES_SUCCESS`;
-const CATEGORIES_FAILURE = `${prefix}/CATEGORIES_FAILURE`;
-const SET_CURRENT_CATEGORY = `${prefix}/SET_CURRENT_CATEGORY`;
-
 
 /**
  *  Models
@@ -40,15 +36,8 @@ export const ProductModel = Record({
 	company: ''
 }, 'ProductModel');
 
-export const CategoryModel = Record({
-	id: '',
-	name: ''
-}, 'CategoryModel');
 
 const ReducerRecord = Record({
-	loadingCategories: false,
-	activeCategoryId: '',
-	categories: new OrderedMap(),
 	entities: new OrderedMap(),
 	loading: false,
 	loaded: false,
@@ -90,15 +79,6 @@ export default function reducer(state = new ReducerRecord(), action) {
 				.update('entities', entities => entities.merge(mapToOrderedMap(payload.entities, ProductModel)));
 		}
 
-		case CATEGORIES_SUCCESS: {
-			return state.update('categories', categories => categories.merge(mapToOrderedMap(payload.categories, CategoryModel)))
-		}
-
-		case SET_CURRENT_CATEGORY: {
-			return state.set('activeCategoryId', payload.id);
-		}
-
-		case CATEGORIES_FAILURE:
 		case PRODUCT_BY_ID_FAILURE:
 		case PRODUCTS_FAILURE: {
 			return state
@@ -117,28 +97,13 @@ export default function reducer(state = new ReducerRecord(), action) {
  *  Selectors
  */
 export const productsGetter = state => state[moduleName].entities;
-const activeCategoryIdGetter = state => state[moduleName].activeCategoryId;
 export const productLengthGetter = state => state[moduleName].entities.size;
 const productIdGetter = (_, id) => id;
-const categoriesGetter = state => state[moduleName].categories;
 
-export const productsSelector = createSelector(productsGetter, activeCategoryIdGetter, (items, activeCategoryId) => {
-	let result = items;
-
-	//filter by active category
-	if (activeCategoryId) {
-		result = result.filter((item) => item.categoryId === activeCategoryId);
-	}
-
-	return result;
-});
+export const productsSelector = createSelector(productsGetter, (items) => items);
 
 export const productByIdSelector = createSelector(productsGetter, productIdGetter, (items, id) => {
 	if (id && items.has(id)) return items.get(id);
-});
-
-export const categoriesSelector = createSelector(categoriesGetter, (categories) => {
-	return categories.valueSeq().toArray();
 });
 
 
@@ -195,33 +160,5 @@ export function loadProductById(id) {
 				type: PRODUCT_BY_ID_FAILURE
 			});
 		}
-	}
-}
-
-export function loadCategories() {
-	return async dispatch => {
-		try {
-			const url = `${apiUrl}/categories/`;
-			const { data } = await axios.get(url);
-
-			dispatch({
-				type: CATEGORIES_SUCCESS,
-				payload: {
-					categories: data.categories
-				}
-			});
-
-		} catch (_) {
-			dispatch({
-				type: CATEGORIES_FAILURE
-			});
-		}
-	}
-}
-
-export function setCurrentCategory(id) {
-	return {
-		type: SET_CURRENT_CATEGORY,
-		payload: { id }
 	}
 }
