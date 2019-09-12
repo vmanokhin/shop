@@ -32,6 +32,7 @@
     "reselect": "^4.0.0"
   },
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -53,6 +54,7 @@
     ]
   },
   "devDependencies": {
-    "node-sass": "^4.12.0"
+    "node-sass": "^4.12.0",
+    "source-map-explorer": "^2.0.1"
   }
 }
