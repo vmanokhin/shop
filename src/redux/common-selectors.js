@@ -4,7 +4,9 @@ import {
 	PRICE_DESC,
 	productsSortProp,
 	searchValueGetter,
-	activeCategoryIdGetter
+	activeCategoryIdGetter,
+	priceStartGetter,
+	priceEndGetter,
 } from '../ducks/filters';
 import {
 	productsGetter,
@@ -17,8 +19,10 @@ export const productsFilteredSelector = createSelector(
 	productsSortProp, 
 	searchValueGetter, 
 	activeCategoryIdGetter,
+	priceStartGetter,
+	priceEndGetter,
 	productsSelector,
-	(sortProp, search, categoryId, products) => {
+	(sortProp, search, categoryId, priceStart, priceEnd, products) => {
 		let result;
 		
 		switch (sortProp) {
@@ -38,11 +42,16 @@ export const productsFilteredSelector = createSelector(
 
 		//filter by active category
     if (categoryId) {
-        result = result.filter((item) => item.categoryId === categoryId);
+        result = result.filter(item => item.categoryId === categoryId);
     }
-		
+
+		//filter by price
+		if (priceStart || priceEnd) {
+			result = result.filter(({ price }) => price >= priceStart && (priceEnd && price <= priceEnd));
+		}		
+
 		//filter by active search
-		result = result.filter((item) => item.name.toLowerCase && item.name.toLowerCase().includes(search.toLowerCase()));
+		result = result.filter(item => item.name.toLowerCase && item.name.toLowerCase().includes(search.toLowerCase()));
 		
 		return result.valueSeq().toArray();
 	}

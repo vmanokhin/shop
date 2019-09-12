@@ -23,6 +23,7 @@ const FILTERS_SUCCESS = `${prefix}/FILTERS_SUCCESS`;
 const FILTERS_FAILURE = `${prefix}/FILTERS_FAILURE`;
 
 const SET_CURRENT_CATEGORY = `${prefix}/SET_CURRENT_CATEGORY`;
+const SET_PRICES = `${prefix}/SET_PRICES`;
 
 
 /**
@@ -34,6 +35,7 @@ export const CategoryModel = Record({
 }, 'CategoryModel');
 
 const ReducerRecord = Record({
+	loaded: false,
 	loading: false,
 	categories: new OrderedMap(),
 	activeCategoryId: '',
@@ -67,6 +69,14 @@ export default function reducer(state = new ReducerRecord(), action) {
 			return state.set('activeCategoryId', payload.id);
 		}
 
+		case SET_PRICES: {
+			const { start, end } = payload;
+
+			return state
+				.set('priceStart', start)
+				.set('priceEnd', end);
+		}
+
 		case FILTERS_START: {
 			return state.set('loading', true);
 		}
@@ -78,6 +88,7 @@ export default function reducer(state = new ReducerRecord(), action) {
 				.update('categories', cats => cats.merge(mapToOrderedMap(categories, CategoryModel)))
 				.setIn(['defaults', 'priceMin'], price.min)
 				.setIn(['defaults', 'priceMax'], price.max)
+				.set('loaded', true)
 				.set('loading', false);
 		}
 
@@ -101,10 +112,15 @@ export const productsSortProp = state => state[moduleName].sortProperty;
 export const searchValueGetter = state => state[moduleName].search;
 export const activeCategoryIdGetter = state => state[moduleName].activeCategoryId;
 const categoriesGetter = state => state[moduleName].categories;
+export const defaultsGetter = state => state[moduleName].defaults;
+export const priceStartGetter = state => state[moduleName].priceStart;
+export const priceEndGetter = state => state[moduleName].priceEnd;
 
 export const categoriesSelector = createSelector(categoriesGetter, (categories) => {
 	return categories.valueSeq().toArray();
 });
+
+export const pricesSelector = createSelector(priceStartGetter, priceEndGetter, (start, end) => [start, end]);
 
 /**
  *  Actions
@@ -153,5 +169,12 @@ export function setCurrentCategory(id) {
 	return {
 		type: SET_CURRENT_CATEGORY,
 		payload: { id }
+	}
+}
+
+export function setPrices([ start, end ]) {
+	return {
+		type: SET_PRICES,
+		payload: { start, end }
 	}
 }

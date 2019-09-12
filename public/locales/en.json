@@ -30,6 +30,7 @@
 	},
 	"filters": {
 		"sort_by": "Sort by",
+		"price": "Price",
 		"price_asc": "price asc",
 		"price_desc": "price desc"
 	},
