@@ -102,10 +102,11 @@ class ProductPage extends Component {
 			product: { name }, 
 			t,
 			addToCart, 
+			productId,
 			enqueueSnackbar 
 		} = this.props;
 
-		addToCart(name);
+		addToCart(productId);
 		
 		enqueueSnackbar && enqueueSnackbar(t('product.product_added', { product: name }), {
 			variant: 'success'
