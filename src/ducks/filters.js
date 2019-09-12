@@ -9,8 +9,8 @@ import { appName } from '../config';
 export const moduleName = 'filters';
 const prefix = `${appName}/${moduleName}`;
 
-export const PRICE_ASC = 'price asc';
-export const PRICE_DESC = 'price desc';
+export const PRICE_ASC = 'price_asc';
+export const PRICE_DESC = 'price_desc';
 export const sortProperties = [PRICE_ASC, PRICE_DESC];
 
 const SUBMIT_SEARCH_FORM = `${prefix}/SUBMIT_SEARCH_FORM`;

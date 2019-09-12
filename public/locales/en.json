@@ -29,7 +29,9 @@
 		"product_added": "Product {{product}} added to cart!"
 	},
 	"filters": {
-		"sort_by": "Sort by"
+		"sort_by": "Sort by",
+		"price_asc": "price asc",
+		"price_desc": "price desc"
 	},
 	"common": {
 		"search_product": "Search product",

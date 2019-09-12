@@ -20,12 +20,16 @@ function SortContainer(props) {
 	const classes = useStyles();
 	const { t } = useTranslation();
 	const { sortProperty, changeSortProperty } = props;
-	const label = `${t('filters.sort_by')} ${sortProperty}`;
+	
+	const label = `${t('filters.sort_by')} ${t('filters.' + sortProperty)}`;
+
+	const normalizedSortPropeties = sortProperties.map(key => ({
+		key,
+		label: t(`filters.${key}`)
+	}))
 
 	const onChangeHandler = (prop) => {
-		if (sortProperties.includes(prop)) {
-			changeSortProperty(prop);
-		}
+		changeSortProperty(prop);
 	};
 
 	return (
@@ -33,7 +37,7 @@ function SortContainer(props) {
 			<SortDropdown 
 				onChange={onChangeHandler}
 				label={label}
-				items={sortProperties}
+				items={normalizedSortPropeties}
 			/>
 		</div>
 	)

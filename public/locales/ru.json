@@ -29,7 +29,9 @@
 		"product_added": "Продукт {{product}} добавлен в корзину!"
 	},
 	"filters": {
-		"sort_by": "Сортировка по"
+		"sort_by": "Сортировка по",
+		"price_asc": "возрастанию цены",
+		"price_desc": "убыванию цены"
 	},
 	"common": {
 		"search_product": "Найти продукт",

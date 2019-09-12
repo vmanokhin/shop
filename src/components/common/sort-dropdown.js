@@ -54,14 +54,14 @@ class SortDropdown extends Component {
 	renderMenuItems(items = []) {
 		const { classes } = this.props;
 
-		return items.map(item => (
+		return items.map(({ key, label }) => (
 			<MenuItem
-				key={item}
+				key={key}
 				className={classes.menuItem}
-				onClick={this.changeSortPropHandler(item)}
+				onClick={this.changeSortPropHandler(key)}
 				dense
 			>
-				{item}
+				{label}
 			</MenuItem>
 		));
 	}
