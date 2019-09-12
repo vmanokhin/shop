@@ -9,7 +9,7 @@ import AccountIcon from '../components/auth/account-icon';
 import AdapterLink from '../components/common/adapter-link';
 import Search from '../components/common/search';
 import LanguageChanger from '../components/common/language-changer';
-import { submitSearchForm } from '../ducks/products';
+import { submitSearchForm } from '../ducks/filters';
 
 
 const useStyles = makeStyles(theme => ({

@@ -7,9 +7,9 @@ import {
 	ProductModel,
 	productLengthGetter,
 	loadProducts,
-	productsSelector,
 	moduleName as productsModuleName
 } from '../ducks/products';
+import { productsFilteredSelector } from '../redux/common-selectors';
 import Page from '../layouts/Page';
 import ProductList from '../components/product/product-list';
 import Loader from '../components/common/loader';
@@ -80,6 +80,6 @@ export default withTranslation()(connect(state => ({
 	loaded: state[productsModuleName].loaded,
 	fullLoaded: state[productsModuleName].fullLoaded,
 	loading: state[productsModuleName].loading,
-	products: productsSelector(state),
+	products: productsFilteredSelector(state),
 	productLength: productLengthGetter(state)
 }), { loadProducts })(HomePage));

@@ -24,8 +24,6 @@ const CATEGORIES_SUCCESS = `${prefix}/CATEGORIES_SUCCESS`;
 const CATEGORIES_FAILURE = `${prefix}/CATEGORIES_FAILURE`;
 const SET_CURRENT_CATEGORY = `${prefix}/SET_CURRENT_CATEGORY`;
 
-const SUBMIT_SEARCH_FORM = `${prefix}/SUBMIT_SEARCH_FORM`;
-
 
 /**
  *  Models
@@ -49,11 +47,9 @@ export const CategoryModel = Record({
 
 const ReducerRecord = Record({
 	loadingCategories: false,
-	search: '',
 	activeCategoryId: '',
 	categories: new OrderedMap(),
 	entities: new OrderedMap(),
-	sortProperty: 'price',
 	loading: false,
 	loaded: false,
 	fullLoaded: true,
@@ -110,10 +106,6 @@ export default function reducer(state = new ReducerRecord(), action) {
 				.set('error', true);
 		}
 
-		case SUBMIT_SEARCH_FORM: {
-			return state.set('search', payload.value || '');
-		}
-
 		default: {
 			return state;
 		}
@@ -125,32 +117,20 @@ export default function reducer(state = new ReducerRecord(), action) {
  *  Selectors
  */
 export const productsGetter = state => state[moduleName].entities;
-const productsSortProp = state => state[moduleName].sortProperty;
 const activeCategoryIdGetter = state => state[moduleName].activeCategoryId;
-const searchValueGetter = state => state[moduleName].search;
 export const productLengthGetter = state => state[moduleName].entities.size;
 const productIdGetter = (_, id) => id;
 const categoriesGetter = state => state[moduleName].categories;
-const sumIdsGetter = (_, ids) => ids || [];
 
-export const productsSelector = createSelector([
-	productsGetter,
-	productsSortProp,
-	activeCategoryIdGetter,
-	searchValueGetter
-], (items, sortProperty, activeCategoryId, search) => {
-
-	let result = items.sortBy((item) => item[sortProperty]);
+export const productsSelector = createSelector(productsGetter, activeCategoryIdGetter, (items, activeCategoryId) => {
+	let result = items;
 
 	//filter by active category
 	if (activeCategoryId) {
 		result = result.filter((item) => item.categoryId === activeCategoryId);
 	}
 
-	//filter by search
-	result = result.filter((item) => item.name.toLowerCase && item.name.toLowerCase().includes(search.toLowerCase()));
-
-	return result.valueSeq().toArray();
+	return result;
 });
 
 export const productByIdSelector = createSelector(productsGetter, productIdGetter, (items, id) => {
@@ -159,19 +139,6 @@ export const productByIdSelector = createSelector(productsGetter, productIdGette
 
 export const categoriesSelector = createSelector(categoriesGetter, (categories) => {
 	return categories.valueSeq().toArray();
-});
-
-export const sumProductsSelector = createSelector(productsGetter, sumIdsGetter, (products, ids) => {
-	if (!ids.reduce) return 0;
-
-	return ids.reduce((acc, cur) => {
-		if (products.has(cur)) {
-			const product = products.get(cur);
-			return acc + parseInt(product.price, 10);
-		}
-
-		return acc;
-	}, 0);
 });
 
 
@@ -256,12 +223,5 @@ export function setCurrentCategory(id) {
 	return {
 		type: SET_CURRENT_CATEGORY,
 		payload: { id }
-	}
-}
-
-export function submitSearchForm(value) {
-	return {
-		type: SUBMIT_SEARCH_FORM,
-		payload: { value }
 	}
 }

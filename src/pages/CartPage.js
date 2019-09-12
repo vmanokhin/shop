@@ -9,7 +9,7 @@ import AdapterLink from '../components/common/adapter-link';
 import CartTable from '../components/cart/cart-table';
 import CartNav from '../components/cart/cart-nav';
 import { uniqIdsSelector, idsArraySelector } from '../ducks/cart';
-import { sumProductsSelector } from '../ducks/products';
+import { sumProductsSelector } from '../redux/common-selectors';
 
 
 function CartPage(props) {
