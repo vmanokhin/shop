@@ -40,19 +40,22 @@ export const productsFilteredSelector = createSelector(
 			}
 		}
 
-		//filter by active category
-    if (categoryId) {
-        result = result.filter(item => item.categoryId === categoryId);
-    }
+		result = result.filter(item => {
+			const { price, name } = item;
+			//filter by active category
+			if (categoryId && item.categoryId !== categoryId) return false;
 
-		//filter by price
-		if (priceStart || priceEnd) {
-			result = result.filter(({ price }) => price >= priceStart && (priceEnd && price <= priceEnd));
-		}		
+			//filter by price
+			if (priceStart || priceEnd) {
+				if (price < priceStart || (priceEnd && price > priceEnd)) return false;
+			}
 
-		//filter by active search
-		result = result.filter(item => item.name.toLowerCase && item.name.toLowerCase().includes(search.toLowerCase()));
-		
+			//filter by active search
+			if (name.toLowerCase && !item.name.toLowerCase().includes(search.toLowerCase())) return false;
+			
+			return true;
+		});
+
 		return result.valueSeq().toArray();
 	}
 );
