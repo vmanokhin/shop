@@ -1,0 +1,42 @@
+{
+	"buttons": {
+		"load_more": "Load more",
+		"buy": "buy",
+		"buy_item": "Buy item",
+		"more_info": "More info",
+		"catalog": "Catalog",
+		"checkout": "Checkout",
+		"clear_cart": "Clear cart",
+		"close": "close"
+	},
+	"cart": {
+		"total_sum": "Total sum",
+		"image": "image",
+		"name": "Name",
+		"counts": "Counts",
+		"price": "Price",
+		"delete": "delete",
+		"cart_cleaned": "Cart is cleaned",
+		"cart_empty": "Cart is empty. Will back to the",
+		"cart_empty_short": "Cart is empty",
+		"show_products": "Show {{counts}} product"
+	},
+	"product": {
+		"company": "Company",
+		"color": "Color",
+		"material": "Material",
+		"not_found": "Not found products for the current filter",
+		"product_added": "Product {{product}} added to cart!"
+	},
+	"filters": {
+		"sort_by": "Sort by",
+		"price": "Price",
+		"price_asc": "price asc",
+		"price_desc": "price desc"
+	},
+	"common": {
+		"search_product": "Search product",
+		"drop_product": "Drop a product here",
+		"all": "All"
+	}
+}
