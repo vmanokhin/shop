@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import NotFound from './pages/NotFound';
 import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
+import { } from './config';
 
 export const routes = [
 	{

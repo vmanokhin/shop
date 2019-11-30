@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Router } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -8,11 +8,12 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { SnackbarProvider } from 'notistack';
 import './libs/i18next';
 import store from './redux/store';
-import history from './libs/history';
 import App from './App';
 import Loader from './components/common/loader';
+import { isDevelopment, appName } from './config';
 
 const defaultTheme = createMuiTheme();
+const basename = isDevelopment ? '/' : `/${appName}`;
 
 function Root() {
 	return (
@@ -25,7 +26,7 @@ function Root() {
 						hideIconVariant
 						disableWindowBlurListener
 					>
-						<Router history={history}>
+						<Router basename={basename}>
 							<Suspense fallback={<Loader />}>
 								<App />
 							</Suspense>
