@@ -57,7 +57,7 @@ function ProductCard(props) {
 
 	useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: true })
-  });
+  }, [preview]);
 
 	function addToCartHandler() {
 		addToCart(id);
