@@ -1,5 +1,5 @@
 {
-	"homepage": "https://vmanokhin.github.io/shop",
+  "homepage": "https://vmanokhin.github.io/shop",
   "name": "shop",
   "version": "0.1.0",
   "private": true,
@@ -27,14 +27,15 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "redux": "^4.0.4",
+    "redux-devtools-extension": "^2.13.8",
     "redux-form": "^8.2.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0"
   },
   "scripts": {
-		"predeploy": "npm run build",
-		"deploy": "gh-pages -d build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
