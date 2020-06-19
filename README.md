@@ -2,7 +2,6 @@
 
 * React
 * Redux
-* Redux-form
 * Redux-thunk
 * Material-ui
 * React-dnd

@@ -24,12 +24,11 @@ class HomePage extends Component {
 			productLength: PropTypes.number.isRequired,
 			loading: PropTypes.bool.isRequired,
 			loaded: PropTypes.bool.isRequired,
-			fullLoaded: PropTypes.bool.isRequired,
 			products: PropTypes.arrayOf(PropTypes.instanceOf(ProductModel))
 	}
 
 	get body() {
-		const { products, loading, fullLoaded, t } = this.props;
+		const { products, loading, loaded, t } = this.props;
 
 		return (
 			<div className="row">
@@ -38,7 +37,7 @@ class HomePage extends Component {
 					
 					<ProductList products={products} />
 
-					{!fullLoaded && (
+					{!loaded && (
 						<Button onClick={this.loadMoreHandler} disabled={loading} variant="contained" color="primary">{t('buttons.load_more')}</Button>
 					)}
 				</div>
@@ -54,25 +53,25 @@ class HomePage extends Component {
 		const {
 			loadProducts,
 			loading,
-			fullLoaded,
+			loaded,
 			productLength
 		} = this.props;
 
-		if (!fullLoaded && !loading) loadProducts(productLength);
+		if (!loaded && !loading) loadProducts(productLength);
 	};
 
 	componentDidMount() {
-		const { loadProducts, loading, loaded } = this.props;
-		if (!loaded && !loading) loadProducts();
+		const { loadProducts, loading, productLength } = this.props;
+		if (!productLength && !loading) loadProducts();
 	}
 
 	render() {
-		const { loading, loaded } = this.props;
+		const { loading, productLength } = this.props;
 
 		return (
 			<Page>
 				<div className="container">
-					{loading && !loaded ? <Loader /> : this.body}
+					{loading && !productLength ? <Loader /> : this.body}
 				</div>
 			</Page>
 		);
@@ -81,7 +80,6 @@ class HomePage extends Component {
 
 export default withTranslation()(connect(state => ({
 	loaded: state[productsModuleName].loaded,
-	fullLoaded: state[productsModuleName].fullLoaded,
 	loading: state[productsModuleName].loading,
 	products: productsFilteredSelector(state),
 	productLength: productLengthGetter(state)

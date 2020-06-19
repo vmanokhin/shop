@@ -32,7 +32,7 @@ const SET_PRICES = `${prefix}/SET_PRICES`;
 export const CategoryModel = Record({
 	id: '',
 	name: ''
-}, 'CategoryModel');
+});
 
 const ReducerRecord = Record({
 	loaded: false,
@@ -47,7 +47,7 @@ const ReducerRecord = Record({
 		priceMin: 0,
 		priceMax: 0
 	})
-}, 'FiltersReducerRecord');
+});
 
 
 /**
@@ -149,6 +149,8 @@ export function loadFilters() {
 			const url = `${apiUrl}/filters/`;
 			const { data } = await axios.get(url);
 
+			if (!data) return;
+			
 			dispatch({
 				type: FILTERS_SUCCESS,
 				payload: {

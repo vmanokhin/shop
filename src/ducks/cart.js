@@ -22,7 +22,7 @@ const CLEAR_CART = `${prefix}/CLEAR_CART`;
  */
 const ReducerRecord = Record({
 	ids: List()
-}, 'CartReducerRecord');
+});
 
 
 /**

@@ -1,5 +1,6 @@
 import { OrderedMap, Record } from 'immutable';
 import { createSelector } from 'reselect';
+import isUndefined from "lodash/isUndefined";
 import axios from '../libs/axios';
 import { appName, apiUrl } from '../config';
 import { mapToOrderedMap } from '../libs/utils';
@@ -36,12 +37,10 @@ export const ProductModel = Record({
 	company: ''
 }, 'ProductModel');
 
-
 const ReducerRecord = Record({
 	entities: new OrderedMap(),
 	loading: false,
-	loaded: false,
-	fullLoaded: true,
+	loaded: true,
 	error: false
 }, 'ProductsReducerRecord');
 
@@ -61,22 +60,23 @@ export default function reducer(state = new ReducerRecord(), action) {
 		case PRODUCT_BY_ID_SUCCESS: {
 			const { product } = payload;
 
-			if (product && product.id) {
+			if (product && !isUndefined(product.id)) {
 				return state
 					.set('loading', false)
-					.update('entities', entities => entities.set(product.id, ProductModel(product)));
+					.setIn(['entities', product.id], new ProductModel(product));
 			} else {
 				return state;
 			}
 		}
 
 		case PRODUCTS_SUCCESS: {
+			const { isLast, entities } = payload;
+
 			return state
 				.set('loading', false)
-				.set('loaded', true)
-				.set('fullLoaded', payload.isLast)
+				.set('loaded', !!isLast)
 				.set('error', false)
-				.update('entities', entities => entities.merge(mapToOrderedMap(payload.entities, ProductModel)));
+				.mergeIn(['entities'], mapToOrderedMap(entities, ProductModel));
 		}
 
 		case PRODUCT_BY_ID_FAILURE:
@@ -120,6 +120,8 @@ export function loadProducts(offset) {
 			const url = `${apiUrl}/products/${offset ? ('?offset=' + offset) : ''}`;
 			const { data } = await axios.get(url);
 
+			if (!data) return;
+
 			dispatch({
 				type: PRODUCTS_SUCCESS,
 				payload: {
@@ -147,6 +149,8 @@ export function loadProductById(id) {
 		try {
 			const url = `${apiUrl}/products/${id}`;
 			const { data } = await axios.get(url);
+
+			if (!data) return;
 
 			dispatch({
 				type: PRODUCT_BY_ID_SUCCESS,
